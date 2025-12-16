@@ -22,11 +22,14 @@
 
       /* Sidebar tuning */
       --navW: 168px;                 /* compact */
-      --navPadLeft: 204px;           /* body left padding on desktop */
+      --navPadLeft: 204px;           /* body left padding on desktop when sidebar shown */
       --navTop: 96px;                /* below topbar */
       --navRadius: 16px;
       --navBlue: rgba(3, 102, 252, 0.18); /* blue-glass */
       --navBlue2: rgba(3, 102, 252, 0.08);
+
+      /* sticky tabs */
+      --tabsTop: 66px;               /* below topbar */
     }
 
     html{ scroll-behavior:smooth; }
@@ -39,6 +42,11 @@
       color: var(--text);
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Only apply left padding when the guide sidebar is enabled */
+    body.withNav {
+      padding-left: var(--navPadLeft);
     }
 
     /* ===== Full-width fixed top bar (polished) ===== */
@@ -84,6 +92,7 @@
       gap: 8px;
       line-height: 1.1;
       letter-spacing: 0.2px;
+      user-select: none;
     }
 
     .topbar-title .brand {
@@ -136,11 +145,19 @@
         0 0 18px rgba(36,240,255,0.10);
     }
 
-    /* ===== Tabs ===== */
+    /* ===== Tabs (sticky, so it never disappears) ===== */
     .tab-buttons {
       display: flex;
       gap: 10px;
       margin-bottom: 14px;
+
+      position: sticky;
+      top: var(--tabsTop);
+      z-index: 9000;
+
+      padding: 10px 0;
+      background: linear-gradient(180deg, rgba(106,139,198,0.0), rgba(106,139,198,0.55) 35%, rgba(106,139,198,0.45));
+      backdrop-filter: blur(6px);
     }
 
     .tab-buttons button {
@@ -356,13 +373,9 @@
         0 0 24px rgba(36,240,255,0.16);
     }
 
-    @media (min-width: 1000px) {
-      body { padding-left: var(--navPadLeft); }
-    }
-
     @media (max-width: 999px) {
       .guide-nav { display: none !important; }
-      body { padding-left: 20px; }
+      body, body.withNav { padding-left: 20px; }
     }
 
     /* ===== Neon category boxes for Troubleshooting ===== */
@@ -417,7 +430,7 @@
   </style>
 </head>
 
-<body>
+<body class="withNav">
 
   <!-- TOP BAR -->
   <div class="topbar">
@@ -485,8 +498,18 @@
   <!-- Markdown renderer -->
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
-  <!-- TAB SWITCH + TROUBLESHOOTING LOADER -->
   <script>
+    // Smooth scroll helper with offset for fixed topbar (prevents "jump" feel)
+    function smoothScrollToEl(el) {
+      if (!el) return;
+      const topbar = document.querySelector('.topbar');
+      const tabbar = document.querySelector('.tab-buttons');
+      const offset = (topbar ? topbar.offsetHeight : 0) + (tabbar ? tabbar.offsetHeight : 0) + 14;
+
+      const y = el.getBoundingClientRect().top + window.pageYOffset - offset;
+      window.scrollTo({ top: y, behavior: "smooth" });
+    }
+
     function openTab(tab) {
       document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
       document.querySelectorAll('.tab-buttons button').forEach(el => el.classList.remove('active'));
@@ -494,32 +517,62 @@
       document.querySelector(`.tab-buttons button[onclick="openTab('${tab}')"]`).classList.add('active');
 
       const nav = document.getElementById("guideNav");
-      if (nav) nav.style.display = (tab === "guide") ? "block" : "none";
+      const body = document.body;
+
+      const showNav = (tab === "guide");
+      if (nav) nav.style.display = showNav ? "block" : "none";
+      body.classList.toggle("withNav", showNav);
     }
 
-    // Jump to category
+    // Jump to category section within troubleshooting tab
     function jumpToCategory(key) {
       openTab('troubleshooting');
       setTimeout(() => {
         const el = document.getElementById(`cat-${key}`);
-        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-      }, 50);
+        if (el) smoothScrollToEl(el);
+      }, 80);
+    }
+
+    async function fetchJsonWithFallback() {
+      // IMPORTANT:
+      // GitHub Pages commonly does NOT serve dot-folders reliably (like ".github/").
+      // So we try the root path first (recommended), then fallback.
+      const tries = [
+        `troubleshooting.json?v=${Date.now()}`,
+        `.github/troubleshooting.json?v=${Date.now()}`
+      ];
+
+      let lastErr = null;
+
+      for (const url of tries) {
+        try {
+          const res = await fetch(url, { cache: "no-store" });
+          if (!res.ok) throw new Error(`Fetch failed (${res.status}) for ${url}`);
+          return await res.json();
+        } catch (e) {
+          lastErr = e;
+        }
+      }
+
+      throw lastErr || new Error("Failed to load JSON.");
     }
 
     async function loadIssues() {
       try {
-        // Your file is located at: .github/troubleshooting.json
-        // Cache bust so new commits show up quickly
-        const url = `.github/troubleshooting.json?v=${Date.now()}`;
-        const response = await fetch(url, { cache: "no-store" });
-        if (!response.ok) throw new Error(`Fetch failed: ${response.status}`);
-        const data = await response.json();
+        const data = await fetchJsonWithFallback();
         displayIssues(data);
       } catch (err) {
         console.error("Error loading troubleshooting.json", err);
         const container = document.getElementById('issues');
         if (container) {
-          container.innerHTML = `<div class="section-empty">Could not load troubleshooting.json. Check that it exists at <b>.github/troubleshooting.json</b>.</div>`;
+          container.innerHTML = `
+            <div class="section-empty">
+              Could not load <b>troubleshooting.json</b>.
+              <br><br>
+              Best fix: move the file to the repo root as <b>/troubleshooting.json</b>.
+              <br>
+              (Fallback: <b>.github/troubleshooting.json</b>)
+            </div>`;
         }
       }
     }
@@ -617,18 +670,18 @@
           el.textContent = word.slice(0, i);
           if (i >= word.length) {
             deleting = true;
-            return setTimeout(tick, 1400);
+            return setTimeout(tick, 1500);
           }
-          return setTimeout(tick, 85);   // slower typing
+          return setTimeout(tick, 95);   // slower typing
         } else {
           i--;
           el.textContent = word.slice(0, i);
           if (i <= 0) {
             deleting = false;
             w = (w + 1) % words.length;
-            return setTimeout(tick, 380);
+            return setTimeout(tick, 420);
           }
-          return setTimeout(tick, 55);   // slower delete
+          return setTimeout(tick, 65);   // slower delete
         }
       }
 
@@ -999,7 +1052,7 @@ AI Gather Pine Tree - Supreme Saturator
 
         a.addEventListener("click", (e) => {
           e.preventDefault();
-          el.scrollIntoView({ behavior: "smooth", block: "start" });
+          smoothScrollToEl(el);
           history.replaceState(null, "", `#${id}`);
         });
 
@@ -1018,7 +1071,6 @@ AI Gather Pine Tree - Supreme Saturator
       const map = new Map(links.map(a => [a.dataset.target, a]));
 
       const obs = new IntersectionObserver((entries) => {
-        // Find the top-most visible heading
         const visible = entries
           .filter(e => e.isIntersecting)
           .sort((a, b) => (a.boundingClientRect.top - b.boundingClientRect.top));
@@ -1039,8 +1091,10 @@ AI Gather Pine Tree - Supreme Saturator
 
     buildGuideNav();
 
+    // Start in Guide tab with sidebar enabled
     const nav = document.getElementById("guideNav");
     if (nav) nav.style.display = "block";
+    document.body.classList.add("withNav");
 
     loadIssues();
   </script>
@@ -1048,3 +1102,4 @@ AI Gather Pine Tree - Supreme Saturator
 </body>
 
 </html>
+
