@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Revolution Macro Guide</title>
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    .tab-buttons {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 25px;
+    }
+
+    .tab-buttons button {
+      padding: 10px 18px;
+      border: none;
+      background: #ddd;
+      cursor: pointer;
+      border-radius: 6px;
+      font-size: 16px;
+      transition: 0.2s;
+    }
+
+    .tab-buttons button.active {
+      background: #bbb;
+      font-weight: bold;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .issue-block {
+      border: 1px solid #ccc;
+      padding: 15px;
+      margin: 15px 0;
+      border-radius: 8px;
+    }
+
+    .issue-title {
+      font-weight: bold;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .issue-body {
+      margin-top: 10px;
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- TAB BUTTONS -->
+  <div class="tab-buttons">
+    <button class="active" onclick="openTab('guide')">Clickpath Guide</button>
+    <button onclick="openTab('troubleshooting')">Troubleshooting</button>
+  </div>
+
+  <!-- ==================== GUIDE TAB ==================== -->
+  <div id="guide" class="tab-content active">
+    <div class="stackedit__html" id="guideContent"></div>
+  </div>
+
+  <!-- ==================== TROUBLESHOOTING TAB ==================== -->
+  <div id="troubleshooting" class="tab-content">
+    <h2>Troubleshooting</h2>
+
+    <input id="search" type="text" placeholder="Search issues..."
+      style="width:100%;padding:10px;font-size:16px;margin-bottom:20px;">
+
+    <div id="issues"></div>
+  </div>
+
+  <!-- Markdown renderer (for showing your 0.8c guide EXACTLY as written) -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <!-- TAB SWITCH SYSTEM -->
+  <script>
+    function openTab(tab) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tab-buttons button').forEach(el => el.classList.remove('active'));
+      document.getElementById(tab).classList.add('active');
+      document.querySelector(`.tab-buttons button[onclick="openTab('${tab}')"]`).classList.add('active');
+    }
+
+    async function loadIssues() {
+      try {
+        const response = await fetch('troubleshooting.json');
+        const data = await response.json();
+        displayIssues(data);
+      } catch (err) {
+        console.error("Error loading troubleshooting.json", err);
+      }
+    }
+
+    function displayIssues(issues) {
+      const container = document.getElementById('issues');
+      container.innerHTML = "";
+
+      issues.forEach(issue => {
+        const block = document.createElement('div');
+        block.className = "issue-block";
+
+        const title = document.createElement('div');
+        title.className = "issue-title";
+        title.textContent = issue.title;
+
+        const body = document.createElement('div');
+        body.className = "issue-body";
+        body.textContent = issue.solution;
+
+        title.onclick = () => {
+          body.style.display = body.style.display === "none" ? "block" : "none";
+        };
+
+        block.appendChild(title);
+        block.appendChild(body);
+        container.appendChild(block);
+      });
+    }
+
+    document.getElementById("search").addEventListener("input", function () {
+      const q = this.value.toLowerCase();
+      document.querySelectorAll(".issue-block").forEach(block => {
+        const t = block.querySelector(".issue-title").textContent.toLowerCase();
+        const b = block.querySelector(".issue-body").textContent.toLowerCase();
+        block.style.display = (t.includes(q) || b.includes(q)) ? "block" : "none";
+      });
+    });
+
+    // Render your 0.8c guide text EXACTLY (verbatim) from Markdown
+    const guideMarkdown = `# Revolution Macro and basic menu navigation guide
+
+Use this for reference!
+
+**Tabs and sub menu formats:**
+- "#" means it's a top navigation bar's tab
+- "##" means it's a menu you can go in to
+- "###" means it's a sub menu
+- "####" means it's a deeper sub menu
+
+Do not include the hashtags in your responses, format them instead!
+
+**Button/Feature format:**
+- *Feature/Button Name*: *What it does*
+
+## version 0.8c (Pre-release 2)
+
+Default Key Binds:
+* START - F1
+* PAUSE - F2
+* STOP - F3
+
+# Tabs - 6 in total
+
+1. Gather Tab
+2. Collect Tab
+3. Planters Tab
+4. Status Tab
+5. Tools Tab
+6. Settings Tab
+
+# Gather Tab (1)
+
+## Fields
+
+- To edit a field, click the pen icon, to paste pre-made settings, click the 6 dots icon, and click "Paste". Find pre-made settings in the Discord server -> #patterns-configs
+- Editing the Field (Suggested to copy and paste pre-made settings from the Revolution Discord
+- Disable drift detection (uses supreme saturator to align character) -> click the pen icon -> click "align" located under max backpack -> disable
+- Walk or reset to hive: Skull Symbol and Person walking switch, per field setting
+
+## Boosts
+
+- Make sure your sprinkler is in slot 1
+- Configure slots 2-7 to your liking
+
+## Gather settings
+
+### General
+- Set sprinkler type to your current sprinkler in Bee Swarm
+- If you are blue and macro in Pine tree and have good fps, enable "Use Fast Pine Return Path"
+- Disable Gathering: Wait for tasks and prevent the macro from farming honey
+- Use Dipper: Hold/Auto click your mouse
+- Inactive Honey Timeout: Maximum amount of seconds before the macro stop gathering if no honey is being made, default is 10 seconds
+- Full Bag Timeout: Maximum amount of seconds before stopping gathering if your capacity (aka. backpack) is full. The default is 5 but if it isn't working change to 0 or 1 seconds
+- Sprinkler spacing: The distance between each sprinklers in studs unit, Only work on non Supreme sprinklers
+
+### Conversion
+- Finish Conversion After Balloon Refresh: Stop converting as soon as your balloon blessing refresh
+- Config this page to your needs, like minimum balloon blessing
+
+### Field Defaults
+- Every field's settings, used mainly for quests
+- Also default presets when you add a new field to the target fields
+
+## AI Gather
+
+### settings
+- Maximum Model FPS: 10 is recommended, higher results in diminishing return
+- Use Full Model: Only turn this on if it's not working normally
+- Loot Mode: For collecting non-ability tokens
+- Eco Mode: Use a smaller model, NOT supported on Windows 10
+
+### Token Priority
+- Drag around the tokens in the list to reorder them, you can also type in the numbers manually
+- Higher = More priority
+
+# Collect Tab (2)
+
+## Dispensers
+
+- Enable "Wealth Clock" as all macro needs it
+- Other dispensers are Blueberry, Strawberry, Coconut, Glue, Robo pass, Ant pass
+
+## Bug Run
+
+- If you have gifted vicious bee, set "Monster Respawn Percent" to "15%"
+- You can config each bug/creatures killing, looting, minimum time between kills
+
+## Quests
+
+### Polar Bear
+ - Polar Bear Enabled: Turn this on if you lack polar power. If you have >1000, enable.
+ - Gather Interrupt: Will do the quest as soon as possible
+ - Priority: Work in progress
+
+## Buffs
+
+### Sticker Stack
+- Optional
+
+### Mondo Chick
+- Recommended to enable Mondo Chick if you're underfilling or have an attack alt account
+- Gather Interrupt: Stop gathering to fight mondo chick
+- Kill: Turn this on with ai mondo battle is recommended
+- AI Mondo Battle: Fight the Mondo Chick with AI or not, might be less consistent if you don't have enough damage or defense
+- Buff Time: If you don't have Kill turn on, set this to 60 seconds or 120 seconds
+
+### HQ Boosters
+- Enable your designated booster color
+- Recommended to gather in boosted field if you have alts to help your main account on the field
+
+## Bosses
+
+- WIP.
+
+## Blender
+
+- WIP.
+
+# Planters Tab (3)
+
+- Duration (top left) Keep to "12" or "24" hours, 48 hours is also optional
+- Clear Schedule: clears planter schedule (collect all planters before clearing)
+- Refresh Schedule: refreshes planter schedule
+- Settings - Recommended to enable "Gather Loot", "Reset when Harvesting" Keep timeline mode to "Timer"
+
+## Auto Planters
+
+### Settings
+- Disable Planter: Weather to plant or not
+- Gather Loot: Turn this on for materials
+- Pathfind When Planting: Tries to find the fastest walking route for field to field, if turned off the macro will reset and use the normal pathing and red cannon instead.
+- Reset When Harvesting: When disabled, Tries to walk field to field for planters harvesting. If enabled, will take the normal routing.
+
+### Auto planters
+#### Settings
+- Enabled: Turn this on for automatic planters, if not then it's manual mode
+- Degradation Multiplier: Default at 1.2x, ranges from 1.0 to 2.0, Encourage the algorithm to switch fields when placing the same planter
+- Build Nectars: The popular option is 2 Build and 1 Maintain, you can only have 3 active planters at once
+- Harvest Automatic: If disabled, you can choose your own min and max growth time for your planters
+- Harvest Fully Grown: Will only harvest when your planters is at 100%
+#### Nectar Goals
+- There are five types of Nectar: Invigorating, Satisfying, Motivating, Comforting and Refreshing
+- You can set your own target percentage for each nectars
+- You can drag them up or down to swap/change priority level
+#### Fields
+- You can select each fields to enable/disable planting in that field
+- Set what planters can each fields have
+#### Planters
+- Enable/Disable each planters and target fields
+
+# Status Tab (4)
+
+## Logs
+
+- Open Logs Folder: View all log files
+- Copy Logs: Copy the latest logs to your clipboard
+- Reset Settings: Restore everything to the default
+
+## Webhook
+
+How to connect your macro to a Discord Webhook **(Recommended)**
+
+1. Make a new Discord server
+2. Edit/Press the gear icon on the "general" text channel (has gear icon on the right)
+3. Once you open text channel settings, go to integrations Click Webhooks, and make a new Webhooks
+4. Copy the Webhook URL, and open Revolution Macro Paste the Webhook URL in the macro in the Status tab -> Webhook
+5. Add your discord ID for pings if something goes wrong (optional)
+6. To do step 5, turn on developer mode on Discord, and copy your ID and post it into the macro under webhooks
+
+Hourly graphs are automatically processed by the macro and sent via webhook.
+
+## Bot
+
+How to setup the Revolution Macro Discord bot **(Recommended)**
+
+1. Create a new Discord bot with the correct permissions and add it to your server (There's online guides for this)
+2. Copy the bot token and paste it into Status tab -> Bot -> Bot Token
+3. Set the Bot Channel to your Discord server's logging channel
+4. Command prefix can remain the same
+5. Enable Slash commands for better ease of use
+
+Run /report for an instant hourly graph report. Hourly graphs are sent automatically.
+
+# Tools Tab (5)
+
+## Auto Jelly
+
+- Pick the bee you want the macro to auto-jelly on
+- Enable the options you want for the bee such as Stop On Mythic or Require Mutation
+- You can select the mutation type you want
+
+## RBC Gather
+
+### General
+- Enabled: Off or On
+- Role: Main account or Fuzzy bee account
+- Field Navigation Mode: Hard to Easy, Easy to Hard, Manual
+
+### Alt
+- Rejoin Server On Reset: May be faster than letting your fuzzy alt recover
+- Disable Reset When Navigating: Your alt will attempt to move to your field without resetting
+- Maximum Alts On Field: Any number
+- Detect Quests After Round: Minimum RBC round before the macro starts moving your alt to the quest fields
+
+### Hotkeys
+- Configure to your liking
+
+### Field Picker
+- Select an alt and configure it
+- Remember to connect your alt revolution macro instances to the relay network
+
+## Tad Sync
+
+### General
+- Enabled: Off or On
+- Role: Main or Alt account
+- Use Best Pine Alt Pattern: Pine tree field movement pattern for the tadpole alt
+- Use Best Bamboo Alt Pattern: Bamboo field movement pattern for the tadpole alt
+- Use Best Blue Flower Alt Pattern: Blue flow field movement pattern for the tadpole alt
+
+### Alt
+- Select an alt and configure it
+- Make sure it's connected to the relay
+
+## Vic Hop
+
+### General
+- Server Hop is optional
+- If you are doing Vic Hop with no searches, enable "Role" to "Main" so your account kills the vicious.
+- Enable everything in the "main" tab and disable everything in the "Searcher" tab. This is only if you aren’t using mains
+
+### Main
+- Claim Hive When Searching: claim a hive slot before finding wild vicious bee
+- Join New Battles: Go into battles that other player started
+- Join In-Progress Battles: Join already on-going battles
+- Vicious Bee Minimum Health: Minimum HP percentage for the Join In-Progress Battles option
+
+### Searcher
+- Skip Spider Search: Skip Spider Field when searching
+- Skip Pepper Search: Skip Pepper Field when searching
+- Join Empty Servers: Unknown if this actually helps with how much stingers you can get
+- Re-Open Roblox After: Set to any hours (default is 2 hours)
+
+## Mondo Hop
+
+- Enabled: Off or On
+- Role: Main or Searcher
+- Loot For Seconds: Amount of time the macro will loot mondo chick after it dies
+
+# Settings Tab (6)
+
+## Macro
+
+### Appearance
+- Theme: dark mode ofc
+- Always On Top: Only enable this if you need to always see the macro app window
+
+### Hotkeys
+- Set your Start, Pause, Stop hotkeys here
+
+### Capture
+- Fallback Capture Mode: Available options are Window, GPU, Legacy
+- Detection Frame Rate: Lower = Less CPU usage, but less accurate buff detection and movement correction
+
+### Misc
+- Log Level: Set to 4 for maximum verbose logging (only for debugging), else keep at 0
+- Load Timeout: Maximum seconds before aborting loading AI models (default is 30), set this to something high like 60 if your AI models aren't loading
+
+## Game
+
+### Movement
+- Player Movespeed: Your BSS movespeed (ingame) WITHOUT any speed buffs
+- Camera Sensitivity: Set to your current in-game settings, or press the eye icon for auto detect
+- Key Delay: Default at 20ms, Set this higher to 30-50 if you have low FPS
+- Pattern Retry Count: How many times should the macro attempt to do navigations before giving up on the task
+
+### Routing
+- Use High Alignment: Turn this on if you have low FPS or pathing issues
+- Disable Red Cannon: Only turn this on if you can't use the red cannon
+
+### Join
+- Preferred Hive Slot: Slot 6 to 1, 6 being closest to noob shop and 1 closest to red cannon
+- Hive Claim Method: Default is Detect, set it to Check if it's not working
+- Private Server Link: Paste your private server link in here
+- Fallback the Public Server: Join public servers if the macro is having trouble joining the private server
+
+## Networking
+
+- Identity: Your current network identity (differs in RDPs)
+- Relay: Click start
+- Auto-Start: Turn this on if you're constantly using alts
+- Auto-Connect: Connect to the relay on start
+- Available Relays: Click the plus icon to add a relay, Click the entry icon on your added relay to join it, Click the star icon to your added relay to remove it
+
+## Presets
+
+- WIP.
+
+## Accounts
+
+- WIP.
+
+## Credits
+
+- List of people who helped developed the macro and donators
+
+----
+made by draco/imes ^^`;
+
+    document.getElementById("guideContent").innerHTML = marked.parse(guideMarkdown);
+
+    loadIssues();
+  </script>
+
+</body>
+</html>
