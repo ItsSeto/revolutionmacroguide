@@ -1,694 +1,937 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Revolution Macro Guide</title>
+
+  <!-- StackEdit base typography -->
   <link rel="stylesheet" href="https://stackedit.io/style.css" />
+
+  <!-- Neon favicon (inline SVG) -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3CradialGradient id='g' cx='50%25' cy='40%25' r='70%25'%3E%3Cstop offset='0%25' stop-color='%2324f0ff' stop-opacity='1'/%3E%3Cstop offset='60%25' stop-color='%2324f0ff' stop-opacity='.35'/%3E%3Cstop offset='100%25' stop-color='%23090b10' stop-opacity='1'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='14' fill='url(%23g)'/%3E%3Cpath d='M18 40c7-12 12-17 18-17 6 0 9 4 10 10-2 10-8 15-18 15-5 0-8-2-10-8z' fill='%23090b10' opacity='.9'/%3E%3Cpath d='M20 38c6-10 10-14 16-14 5 0 7 3 8 8-2 8-7 12-16 12-4 0-6-2-8-6z' fill='%2324f0ff' opacity='.9'/%3E%3C/svg%3E" />
 
   <style>
     :root{
-      --bg:#6a8bc6;
-      --panel:rgba(15, 17, 21, 0.92);
-      --panel2:rgba(20, 24, 33, 0.70);
-      --text:#e9e9ea;
-      --muted:rgba(233,233,234,0.78);
-      --neon:#24f0ff;
-      --neon2:rgba(36,240,255,0.22);
-      --stroke:rgba(255,255,255,0.18);
-      --stroke2:rgba(0,255,255,0.30);
-      --shadow: 0 10px 30px rgba(0,0,0,0.25);
+      --bg1: #5f82c8;
+      --bg2: #3a5da2;
+      --panel: rgba(12, 14, 18, 0.84);
+      --panel2: rgba(20, 24, 33, 0.72);
+      --text: #e9e9ea;
+      --muted: rgba(233,233,234,0.75);
 
-      /* Sidebar tuning */
-      --navW: 168px;                 /* compact */
-      --navPadLeft: 204px;           /* body left padding on desktop when sidebar shown */
-      --navTop: 96px;                /* below topbar */
-      --navRadius: 16px;
-      --navBlue: rgba(3, 102, 252, 0.18); /* blue-glass */
-      --navBlue2: rgba(3, 102, 252, 0.08);
+      --neon: #24f0ff;
+      --neonSoft: rgba(36,240,255,0.22);
+      --stroke: rgba(255,255,255,0.16);
+      --stroke2: rgba(36,240,255,0.30);
 
-      /* sticky tabs */
-      --tabsTop: 66px;               /* below topbar */
+      --shadow: 0 16px 44px rgba(0,0,0,0.25);
+      --shadow2: 0 10px 30px rgba(0,0,0,0.22);
+
+      /* Header */
+      --headerH: 92px;
+
+      /* Sidebar (desktop) */
+      --navW: 172px;     /* compact, premium */
+      --navGap: 18px;
+      --navRadius: 18px;
+
+      /* Content max width */
+      --maxW: 1120px;
     }
 
-    html{ scroll-behavior:smooth; }
+    *{ box-sizing: border-box; }
+    html{ scroll-behavior: auto; } /* we handle smooth scroll w/ offset ourselves */
 
-    body {
+    body{
+      margin:0;
       font-family: Arial, sans-serif;
-      padding: 20px;
-      padding-top: 86px; /* space for fixed topbar */
-      background: var(--bg);
       color: var(--text);
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
+
+      /* Premium background gradient */
+      background:
+        radial-gradient(1200px 700px at 20% 10%, rgba(36,240,255,0.14), transparent 60%),
+        radial-gradient(900px 600px at 85% 30%, rgba(36,240,255,0.10), transparent 55%),
+        linear-gradient(160deg, var(--bg1), var(--bg2));
+      min-height: 100vh;
     }
 
-    /* Only apply left padding when the guide sidebar is enabled */
-    body.withNav {
-      padding-left: var(--navPadLeft);
-    }
-
-    /* ===== Full-width fixed top bar (polished) ===== */
-    .topbar {
+    /* ========= ONE HEADER (no double bars) ========= */
+    .app-header{
       position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
+      top:0; left:0; right:0;
       z-index: 9999;
-      padding: 14px 18px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+      height: var(--headerH);
+      padding: 14px 18px 12px;
       background: rgba(10, 12, 16, 0.86);
-      backdrop-filter: blur(10px);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      box-shadow: 0 10px 26px rgba(0,0,0,0.22);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+      box-shadow: 0 14px 30px rgba(0,0,0,0.24);
     }
-
-    .topbar::after{
+    .app-header::after{
       content:"";
       position:absolute;
       left:0; right:0; bottom:-1px;
       height:1px;
-      background: linear-gradient(90deg, transparent, rgba(36,240,255,0.35), transparent);
+      background: linear-gradient(90deg, transparent, rgba(36,240,255,0.40), transparent);
       pointer-events:none;
     }
 
-    .topbar-left {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      min-width: 240px;
-      flex-wrap: wrap;
+    .header-row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 14px;
+      height: 44px;
     }
 
-    .topbar-title {
-      font-size: 18px;
-      font-weight: 800;
-      display: inline-flex;
-      align-items: baseline;
-      gap: 8px;
-      line-height: 1.1;
-      letter-spacing: 0.2px;
-      user-select: none;
-    }
-
-    .topbar-title .brand {
-      color: var(--text);
-      font-weight: 900;
-    }
-
-    /* IMPORTANT: no min-width so caret follows text */
-    .topbar-title .typing {
-      color: var(--neon);
-      font-weight: 900;
-      text-shadow: 0 0 16px rgba(36, 240, 255, 0.25);
-      display: inline-block;
+    .brand-wrap{
+      display:flex;
+      align-items:baseline;
+      gap:10px;
+      min-width: 260px;
       white-space: nowrap;
     }
 
-    .topbar-title .caret {
-      display: inline-block;
-      width: auto;
+    .brand-title{
+      font-weight: 900;
+      letter-spacing: 0.2px;
+      font-size: 18px;
+      display:flex;
+      align-items:baseline;
+      gap:10px;
+    }
+    .brand-title .brand{
+      color: var(--text);
+      text-shadow: 0 0 18px rgba(255,255,255,0.06);
+    }
+
+    .typingWrap{
+      display:inline-flex;
+      align-items:baseline;
+      gap:4px;
+      min-width: 210px; /* avoids layout shift while typing */
+    }
+    .typing{
       color: var(--neon);
-      animation: blink 0.9s step-end infinite;
-      transform: translateY(-1px);
-      text-shadow: 0 0 14px rgba(36, 240, 255, 0.20);
+      text-shadow: 0 0 16px rgba(36,240,255,0.30);
+      font-weight: 900;
     }
+    .caret{
+      display:inline-block;
+      color: var(--neon);
+      opacity: 0.95;
+      transform: translateY(1px);
+      animation: blink 1s steps(1, end) infinite;
+      text-shadow: 0 0 16px rgba(36,240,255,0.30);
+    }
+    @keyframes blink{ 50%{ opacity: 0; } }
 
-    @keyframes blink { 50% { opacity: 0; } }
-
-    .topbar-right {
-      display: flex;
-      gap: 10px;
+    .header-actions{
+      display:flex;
+      align-items:center;
+      gap:10px;
       flex-wrap: wrap;
+      justify-content:flex-end;
     }
 
-    .topbar-link {
-      text-decoration: none;
+    .pill-link{
+      text-decoration:none;
       color: var(--text);
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      background: rgba(20, 24, 33, 0.65);
-      padding: 8px 12px;
-      border-radius: 12px;
-      box-shadow: 0 0 0 1px rgba(36,240,255,0.06) inset;
-      transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease;
-    }
-
-    .topbar-link:hover {
-      transform: translateY(-1px);
-      background: rgba(20, 24, 33, 0.85);
-      box-shadow:
-        0 0 0 1px rgba(36,240,255,0.16) inset,
-        0 0 18px rgba(36,240,255,0.10);
-    }
-
-    /* ===== Tabs (sticky, so it never disappears) ===== */
-    .tab-buttons {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 14px;
-
-      position: sticky;
-      top: var(--tabsTop);
-      z-index: 9000;
-
-      padding: 10px 0;
-      background: linear-gradient(180deg, rgba(106,139,198,0.0), rgba(106,139,198,0.55) 35%, rgba(106,139,198,0.45));
-      backdrop-filter: blur(6px);
-    }
-
-    .tab-buttons button {
-      padding: 10px 18px;
-      border: none;
-      background: rgba(20, 24, 33, 0.70);
-      color: var(--text);
-      cursor: pointer;
-      border-radius: 12px;
-      font-size: 16px;
-      transition: 0.2s;
-      border: 1px solid rgba(255, 255, 255, 0.16);
-      box-shadow: 0 10px 24px rgba(0,0,0,0.18);
-    }
-
-    .tab-buttons button.active {
-      background: rgba(20, 24, 33, 0.86);
-      font-weight: bold;
-      border-color: rgba(36,240,255,0.22);
-      box-shadow:
-        0 0 0 1px rgba(36,240,255,0.10) inset,
-        0 0 16px rgba(36,240,255,0.10);
-    }
-
-    .tab-content { display: none; }
-
-    .tab-content.active {
-      display: block;
-      animation: fadeIn 160ms ease;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(4px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* ===== Panels ===== */
-    #guide,
-    #troubleshooting {
-      border: 1px solid rgba(255, 255, 255, 0.16);
-      border-radius: 16px;
-      padding: 18px;
-      background: var(--panel);
-      backdrop-filter: blur(8px);
-      box-shadow: var(--shadow);
-    }
-
-    /* Make StackEdit content readable on dark panel */
-    .stackedit__html { color: var(--text); }
-    .stackedit__html a { color: var(--text); text-decoration: underline; }
-    .stackedit__html h1,
-    .stackedit__html h2,
-    .stackedit__html h3,
-    .stackedit__html h4,
-    .stackedit__html p,
-    .stackedit__html li { color: var(--text); }
-
-    /* Subtle premium typography improvements WITHOUT changing text */
-    .stackedit__html p, .stackedit__html li { line-height: 1.55; }
-    .stackedit__html h1, .stackedit__html h2, .stackedit__html h3 {
-      text-shadow: 0 0 18px rgba(36,240,255,0.06);
-    }
-
-    /* ===== Troubleshooting cards ===== */
-    .issue-block {
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      background: rgba(20, 24, 33, 0.62);
-      padding: 15px;
-      margin: 14px 0;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(15,17,21,0.62);
+      padding: 10px 14px;
       border-radius: 14px;
       box-shadow: 0 10px 22px rgba(0,0,0,0.18);
+      transition: transform .15s ease, border-color .15s ease, background .15s ease;
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      user-select:none;
+      cursor:pointer;
+    }
+    .pill-link:hover{
+      transform: translateY(-1px);
+      border-color: rgba(36,240,255,0.35);
+      background: rgba(15,17,21,0.78);
     }
 
-    .issue-title {
+    /* Mobile hamburger for sidebar drawer */
+    .hamburger{
+      display:none;
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(15,17,21,0.62);
+      color: var(--neon);
+      cursor:pointer;
+      align-items:center;
+      justify-content:center;
+      box-shadow: 0 10px 22px rgba(0,0,0,0.18);
+      transition: transform .15s ease, border-color .15s ease, background .15s ease;
+    }
+    .hamburger:hover{
+      transform: translateY(-1px);
+      border-color: rgba(36,240,255,0.35);
+      background: rgba(15,17,21,0.78);
+    }
+
+    /* Header tabs row (inside same header => no second bar) */
+    .header-tabs{
+      height: calc(var(--headerH) - 44px - 10px);
+      display:flex;
+      align-items:flex-end;
+      gap:10px;
+      padding-top: 6px;
+    }
+
+    .tab-btn{
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(15,17,21,0.55);
+      color: var(--text);
+      padding: 10px 14px;
+      border-radius: 14px;
+      cursor:pointer;
+      transition: transform .15s ease, border-color .15s ease, background .15s ease;
+      font-size: 15px;
+      user-select:none;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+    }
+    .tab-btn:hover{
+      transform: translateY(-1px);
+      border-color: rgba(36,240,255,0.35);
+      background: rgba(15,17,21,0.72);
+    }
+    .tab-btn.active{
+      border-color: rgba(36,240,255,0.52);
+      box-shadow: 0 0 0 1px rgba(36,240,255,0.18) inset, 0 0 26px rgba(36,240,255,0.10);
+    }
+    .tab-dot{
+      width: 8px; height: 8px;
+      border-radius: 99px;
+      background: rgba(255,255,255,0.25);
+      box-shadow: 0 0 0 2px rgba(0,0,0,0.2) inset;
+    }
+    .tab-btn.active .tab-dot{
+      background: var(--neon);
+      box-shadow: 0 0 18px rgba(36,240,255,0.35);
+    }
+
+    /* ========= Main layout wrapper ========= */
+    .app{
+      padding-top: calc(var(--headerH) + 18px); /* prevents header overlap */
+      padding-left: 18px;
+      padding-right: 18px;
+      padding-bottom: 28px;
+    }
+
+    .layout{
+      display:flex;
+      align-items:flex-start;
+      gap: var(--navGap);
+      max-width: calc(var(--maxW) + var(--navW) + var(--navGap));
+      margin: 0 auto;
+    }
+
+    /* ========= Sidebar (Guide quick jump) ========= */
+    .side{
+      width: var(--navW);
+      position: sticky;
+      top: calc(var(--headerH) + 18px);
+      align-self:flex-start;
+      border-radius: var(--navRadius);
+      background:
+        linear-gradient(180deg, rgba(3, 102, 252, 0.22), rgba(3, 102, 252, 0.10));
+      border: 1px solid rgba(255,255,255,0.14);
+      box-shadow: var(--shadow2);
+      overflow:hidden;
+    }
+
+    .side-header{
+      padding: 14px 12px 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.10);
+      position:relative;
+    }
+    .side-header::after{
+      content:"";
+      position:absolute;
+      left:10px; right:10px; bottom:-1px;
+      height:1px;
+      background: linear-gradient(90deg, transparent, rgba(36,240,255,0.35), transparent);
+      pointer-events:none;
+    }
+    .side-title{
+      font-size: 13px;
+      letter-spacing: 1px;
       font-weight: 900;
-      font-size: 19px;
-      cursor: pointer;
+      text-transform: uppercase;
+      color: rgba(233,233,234,0.88);
+      text-shadow: 0 0 16px rgba(36,240,255,0.10);
+    }
+
+    .side-links{
+      padding: 12px 10px 14px;
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+    }
+
+    .side-links a{
+      display:block;
+      text-decoration:none;
+      color: rgba(233,233,234,0.92);
+      font-weight: 800;
+      padding: 10px 10px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.16);
+      background: rgba(15,17,21,0.55);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      transition: transform .15s ease, border-color .15s ease, background .15s ease;
+      position:relative;
+    }
+    .side-links a:hover{
+      transform: translateY(-1px);
+      border-color: rgba(36,240,255,0.32);
+      background: rgba(15,17,21,0.70);
+    }
+    .side-links a.active{
+      color: var(--neon);
+      border-color: rgba(36,240,255,0.55);
+      box-shadow: 0 0 0 1px rgba(36,240,255,0.12) inset, 0 0 26px rgba(36,240,255,0.10);
+      text-shadow: 0 0 16px rgba(36,240,255,0.22);
+    }
+
+    /* ========= Content panel ========= */
+    .main{
+      flex: 1;
+      min-width: 0;
+    }
+
+    .panel{
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: 18px;
+      background: rgba(15, 17, 21, 0.86);
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow);
+      padding: 18px 18px;
+      overflow:hidden;
+    }
+
+    /* Keep guide + troubleshooting consistent */
+    .tab-content{ display:none; }
+    .tab-content.active{ display:block; animation: fadeInUp 220ms ease both; }
+    @keyframes fadeInUp{
+      from{ opacity: 0; transform: translateY(6px); }
+      to{ opacity: 1; transform: translateY(0); }
+    }
+
+    /* StackEdit content legibility */
+    .stackedit__html{
+      color: var(--text);
+    }
+    .stackedit__html h1, .stackedit__html h2, .stackedit__html h3, .stackedit__html h4,
+    .stackedit__html p, .stackedit__html li{
+      color: var(--text);
+    }
+    .stackedit__html a{
+      color: var(--text);
+      text-decoration: underline;
+      text-decoration-color: rgba(36,240,255,0.35);
+    }
+
+    /* Make code blocks premium + add room for copy button */
+    pre{
+      position: relative;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.16);
+      background: rgba(10,12,16,0.72);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.20);
+      padding: 14px 14px;
+      overflow: auto;
+    }
+    pre code{
+      color: var(--text);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .copy-btn{
+      position:absolute;
+      top:10px;
+      right:10px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(15,17,21,0.70);
+      color: rgba(233,233,234,0.92);
+      padding: 8px 10px;
+      cursor:pointer;
+      font-weight: 800;
+      font-size: 12px;
+      transition: transform .15s ease, border-color .15s ease, background .15s ease;
+      user-select:none;
+    }
+    .copy-btn:hover{
+      transform: translateY(-1px);
+      border-color: rgba(36,240,255,0.35);
+      background: rgba(15,17,21,0.85);
+    }
+    .copy-btn.copied{
+      color: var(--neon);
+      border-color: rgba(36,240,255,0.55);
+      box-shadow: 0 0 18px rgba(36,240,255,0.10);
+    }
+
+    /* ========= Troubleshooting UX ========= */
+    .ts-head{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 14px;
+      margin-bottom: 12px;
+    }
+    .ts-title{
+      margin: 0;
+      font-size: 26px;
+      font-weight: 900;
       letter-spacing: 0.2px;
     }
+    .ts-sub{
+      margin: 6px 0 0;
+      color: var(--muted);
+      line-height: 1.35;
+      max-width: 680px;
+    }
 
-    .issue-body { margin-top: 10px; display: none; color: var(--muted); }
-    .issue-body b, .issue-body strong { color: var(--text); }
+    .ts-toolbar{
+      display:flex;
+      flex-wrap: wrap;
+      align-items:center;
+      gap: 10px;
+      margin: 14px 0 14px;
+    }
 
-    #search {
-      background: rgba(20, 24, 33, 0.76);
+    .ts-search{
+      flex: 1;
+      min-width: 220px;
+      display:flex;
+      gap: 10px;
+      align-items:center;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.16);
+      background: rgba(10,12,16,0.48);
+    }
+    .ts-search input{
+      width:100%;
+      border:none;
+      outline:none;
+      background: transparent;
       color: var(--text);
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      border-radius: 12px;
-      outline: none;
-      box-shadow: 0 0 0 1px rgba(36,240,255,0.06) inset;
+      font-size: 15px;
+    }
+    .ts-search .icon{
+      color: rgba(233,233,234,0.65);
+      font-weight: 900;
     }
 
-    #search:focus{
-      border-color: rgba(36,240,255,0.22);
-      box-shadow:
-        0 0 0 1px rgba(36,240,255,0.12) inset,
-        0 0 22px rgba(36,240,255,0.10);
+    .ts-filter-pill{
+      border: 1px solid rgba(255,255,255,0.16);
+      background: rgba(15,17,21,0.55);
+      color: rgba(233,233,234,0.92);
+      padding: 10px 12px;
+      border-radius: 14px;
+      cursor:pointer;
+      font-weight: 900;
+      transition: transform .15s ease, border-color .15s ease, background .15s ease;
+      user-select:none;
+      white-space: nowrap;
+    }
+    .ts-filter-pill:hover{
+      transform: translateY(-1px);
+      border-color: rgba(36,240,255,0.35);
+      background: rgba(15,17,21,0.72);
+    }
+    .ts-filter-pill.active{
+      color: var(--neon);
+      border-color: rgba(36,240,255,0.55);
+      box-shadow: 0 0 0 1px rgba(36,240,255,0.12) inset, 0 0 26px rgba(36,240,255,0.10);
     }
 
-    /* ===== Back to top ===== */
-    #backToTop {
+    .cat-grid{
+      display:grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin: 14px 0 14px;
+    }
+
+    .cat-card{
+      border: 1px solid rgba(36,240,255,0.22);
+      border-radius: 16px;
+      background: rgba(10,12,16,0.42);
+      padding: 14px 14px;
+      cursor:pointer;
+      box-shadow: 0 10px 22px rgba(0,0,0,0.18);
+      transition: transform .15s ease, border-color .15s ease, background .15s ease;
+      position: relative;
+      overflow:hidden;
+      user-select:none;
+    }
+    .cat-card::before{
+      content:"";
+      position:absolute;
+      inset:-40px;
+      background: radial-gradient(500px 180px at 20% 20%, rgba(36,240,255,0.18), transparent 60%);
+      opacity: 0.9;
+      pointer-events:none;
+    }
+    .cat-card:hover{
+      transform: translateY(-2px);
+      border-color: rgba(36,240,255,0.40);
+      background: rgba(10,12,16,0.55);
+    }
+    .cat-card.active{
+      border-color: rgba(36,240,255,0.62);
+      box-shadow: 0 0 0 1px rgba(36,240,255,0.14) inset, 0 0 34px rgba(36,240,255,0.12);
+    }
+
+    .cat-title{
+      font-weight: 1000;
+      font-size: 18px;
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      color: var(--text);
+    }
+    .cat-title .emoji{
+      filter: drop-shadow(0 0 12px rgba(36,240,255,0.12));
+    }
+    .cat-sub{
+      color: var(--muted);
+      margin-top: 6px;
+      font-size: 13px;
+      line-height: 1.25;
+    }
+
+    .issues-wrap{
+      margin-top: 10px;
+      display:flex;
+      flex-direction:column;
+      gap: 12px;
+    }
+
+    .issue-block{
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 16px;
+      background: rgba(10,12,16,0.44);
+      overflow:hidden;
+      box-shadow: 0 10px 22px rgba(0,0,0,0.16);
+    }
+
+    /* Button header fixes the "first click does nothing" vibe */
+    .issue-title{
+      width: 100%;
+      text-align:left;
+      appearance:none;
+      border:none;
+      background: transparent;
+      color: var(--text);
+      padding: 14px 14px;
+      font-size: 16px;
+      font-weight: 1000;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      user-select:none;
+    }
+    .issue-title:hover{
+      background: rgba(15,17,21,0.35);
+    }
+
+    .issue-title .chev{
+      color: rgba(233,233,234,0.70);
+      font-weight: 1000;
+      transition: transform .15s ease;
+    }
+
+    .issue-body{
+      display:none;
+      padding: 0 14px 14px;
+      color: rgba(233,233,234,0.92);
+      line-height: 1.45;
+    }
+
+    .issue-body.open{
+      display:block;
+      animation: fadeInUp 180ms ease both;
+    }
+
+    .issue-body a{
+      color: var(--text);
+      text-decoration: underline;
+      text-decoration-color: rgba(36,240,255,0.35);
+    }
+
+    .empty{
+      padding: 14px;
+      color: rgba(233,233,234,0.70);
+      border: 1px dashed rgba(255,255,255,0.18);
+      border-radius: 16px;
+      background: rgba(10,12,16,0.30);
+    }
+
+    /* ========= Back to top ========= */
+    #backToTop{
       position: fixed;
       right: 18px;
       bottom: 18px;
       z-index: 999;
       padding: 10px 12px;
-      border-radius: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      background: rgba(10, 12, 16, 0.86);
-      color: var(--text);
-      cursor: pointer;
-      display: none;
-      backdrop-filter: blur(10px);
-      box-shadow:
-        0 0 0 1px rgba(36,240,255,0.06) inset,
-        0 10px 22px rgba(0,0,0,0.20);
-      transition: transform 120ms ease, box-shadow 120ms ease;
-    }
-
-    #backToTop:hover {
-      transform: translateY(-1px);
-      box-shadow:
-        0 0 0 1px rgba(36,240,255,0.14) inset,
-        0 0 20px rgba(36,240,255,0.10),
-        0 10px 22px rgba(0,0,0,0.20);
-    }
-
-    .section-title { margin-top: 20px; margin-bottom: 10px; }
-    .section-empty { opacity: 0.7; margin-bottom: 10px; }
-
-    /* ===== Guide side navigation (compact + integrated + premium) ===== */
-    .guide-nav {
-      position: fixed;
-      left: 14px;
-      top: var(--navTop);
-      width: var(--navW);
-      max-height: calc(100vh - 132px);
-      overflow: auto;
-      padding: 10px;
-      border-radius: var(--navRadius);
-
-      /* Blue glass like it belongs with the page */
-      background:
-        linear-gradient(180deg, var(--navBlue), var(--navBlue2));
-      border: 1px solid rgba(36, 240, 255, 0.30);
-
-      box-shadow:
-        0 0 0 1px rgba(36, 240, 255, 0.12) inset,
-        0 0 26px rgba(36, 240, 255, 0.10),
-        0 14px 28px rgba(0,0,0,0.20);
-
-      backdrop-filter: blur(12px);
-      display: none;
-      z-index: 1000;
-    }
-
-    /* nicer scrollbar */
-    .guide-nav::-webkit-scrollbar { width: 10px; }
-    .guide-nav::-webkit-scrollbar-thumb {
-      background: rgba(36,240,255,0.18);
-      border-radius: 999px;
-      border: 2px solid rgba(0,0,0,0.10);
-    }
-    .guide-nav::-webkit-scrollbar-track { background: rgba(0,0,0,0.10); border-radius: 999px; }
-
-    .guide-nav .nav-title{
-      font-weight: 900;
-      letter-spacing: 0.3px;
-      font-size: 12px;
-      text-transform: uppercase;
-      color: rgba(36,240,255,0.95);
-      text-shadow: 0 0 14px rgba(36,240,255,0.25);
-      padding: 6px 8px 10px 8px;
-      border-bottom: 1px solid rgba(255,255,255,0.12);
-      margin-bottom: 10px;
-    }
-
-    .guide-nav a {
-      display: block;
-      padding: 9px 10px;
-      margin-bottom: 8px;
-      text-decoration: none;
       border-radius: 14px;
-
-      /* Neon text (premium) */
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(10,12,16,0.72);
       color: rgba(233,233,234,0.92);
-      font-weight: 800;
-      letter-spacing: 0.2px;
-
-      border: 1px solid rgba(36, 240, 255, 0.20);
-      background: rgba(20, 24, 33, 0.58);
-      box-shadow: 0 0 0 1px rgba(36,240,255,0.05) inset;
-      transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease, color 120ms ease;
+      cursor:pointer;
+      display:none;
+      box-shadow: 0 10px 22px rgba(0,0,0,0.20);
     }
-
-    .guide-nav a:hover {
-      transform: translateY(-1px);
-      background: rgba(20, 24, 33, 0.82);
-      color: rgba(36,240,255,0.95);
-      text-shadow: 0 0 14px rgba(36,240,255,0.22);
-      box-shadow:
-        0 0 0 1px rgba(36,240,255,0.18) inset,
-        0 0 20px rgba(36,240,255,0.14);
-    }
-
-    .guide-nav a.active {
-      color: rgba(36,240,255,0.98);
-      text-shadow: 0 0 16px rgba(36,240,255,0.26);
-      border-color: rgba(36,240,255,0.34);
-      background: rgba(10, 12, 16, 0.78);
-      box-shadow:
-        0 0 0 1px rgba(36,240,255,0.22) inset,
-        0 0 24px rgba(36,240,255,0.16);
-    }
-
-    @media (max-width: 999px) {
-      .guide-nav { display: none !important; }
-      body, body.withNav { padding-left: 20px; }
-    }
-
-    /* ===== Neon category boxes for Troubleshooting ===== */
-    .cat-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 14px;
-      margin: 12px 0 18px 0;
-    }
-
-    .cat-card {
-      cursor: pointer;
-      border-radius: 18px;
-      padding: 14px 14px;
-      border: 1px solid rgba(36, 240, 255, 0.32);
-      background: rgba(12, 14, 18, 0.62);
-      box-shadow:
-        0 0 0 1px rgba(36, 240, 255, 0.14) inset,
-        0 0 18px rgba(36, 240, 255, 0.12);
-      transition: transform 120ms ease, box-shadow 120ms ease;
-    }
-
-    .cat-card:hover {
-      transform: translateY(-2px);
-      box-shadow:
-        0 0 0 1px rgba(36, 240, 255, 0.24) inset,
-        0 0 26px rgba(36, 240, 255, 0.22);
-    }
-
-    .cat-title {
-      font-size: 18px;
-      font-weight: 900;
+    #backToTop:hover{
+      border-color: rgba(36,240,255,0.35);
       color: var(--neon);
-      margin-bottom: 6px;
-      text-shadow: 0 0 14px rgba(36, 240, 255, 0.25);
     }
 
-    .cat-sub {
-      font-size: 12px;
-      opacity: 0.85;
-      line-height: 1.3;
-      color: var(--muted);
+    /* ========= Mobile / Responsive ========= */
+    @media (max-width: 980px){
+      :root{ --headerH: 92px; }
+
+      .layout{
+        max-width: 980px;
+      }
+
+      /* Hide sticky sidebar; use drawer */
+      .side{
+        display:none;
+      }
+
+      .hamburger{
+        display:inline-flex;
+      }
+
+      .cat-grid{
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
     }
 
-    @media (max-width: 999px) {
-      .cat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    @media (max-width: 560px){
+      .brand-wrap{
+        min-width: 0;
+      }
+      .typingWrap{
+        min-width: 160px;
+      }
+      .cat-grid{
+        grid-template-columns: 1fr;
+      }
+      .pill-link{
+        padding: 10px 12px;
+      }
+      .tab-btn{
+        padding: 10px 12px;
+      }
     }
 
-    @media (max-width: 520px) {
-      .cat-grid { grid-template-columns: 1fr; }
+    /* ========= Sidebar Drawer (mobile) ========= */
+    .drawer-backdrop{
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      backdrop-filter: blur(3px);
+      z-index: 9998;
+      display:none;
     }
+    .drawer{
+      position: fixed;
+      top: var(--headerH);
+      left: 12px;
+      width: min(260px, calc(100vw - 24px));
+      max-height: calc(100vh - var(--headerH) - 12px);
+      overflow:auto;
+      z-index: 9999;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background:
+        linear-gradient(180deg, rgba(3, 102, 252, 0.24), rgba(3, 102, 252, 0.10));
+      box-shadow: var(--shadow);
+      display:none;
+    }
+    .drawer .side-links{
+      padding-bottom: 16px;
+    }
+    .drawer.open,
+    .drawer-backdrop.open{
+      display:block;
+      animation: fadeInUp 160ms ease both;
+    }
+
   </style>
 </head>
 
-<body class="withNav">
-
-  <!-- TOP BAR -->
-  <div class="topbar">
-    <div class="topbar-left">
-      <div class="topbar-title">
-        <span class="brand">Revolution Macro</span>
-        <span class="typing" id="typingWord"></span><span class="caret">|</span>
-      </div>
+<body>
+  <!-- Mobile drawer elements -->
+  <div id="drawerBackdrop" class="drawer-backdrop" aria-hidden="true"></div>
+  <div id="drawer" class="drawer" aria-hidden="true">
+    <div class="side-header">
+      <div class="side-title">Quick Jump</div>
     </div>
-    <div class="topbar-right">
-      <a class="topbar-link" href="https://github.com/RevolutionGuides/revolutionmacroguide/issues" target="_blank"
-        rel="noopener noreferrer">Open Issues</a>
-      <a class="topbar-link"
-        href="https://github.com/RevolutionGuides/revolutionmacroguide/issues/new?template=troubleshooting.yml"
-        target="_blank" rel="noopener noreferrer">Submit Fix</a>
-    </div>
+    <div id="drawerLinks" class="side-links"></div>
   </div>
 
-  <!-- GUIDE SIDE NAV -->
-  <div id="guideNav" class="guide-nav"></div>
+  <!-- ONE header (contains tabs) -->
+  <header class="app-header">
+    <div class="header-row">
+      <div class="brand-wrap">
+        <button id="hamburger" class="hamburger" title="Open Quick Jump" aria-label="Open Quick Jump">
+          ☰
+        </button>
 
-  <!-- TAB BUTTONS -->
-  <div class="tab-buttons">
-    <button class="active" onclick="openTab('guide')">Clickpath Guide</button>
-    <button onclick="openTab('troubleshooting')">Troubleshooting</button>
-  </div>
-
-  <!-- ==================== GUIDE TAB ==================== -->
-  <div id="guide" class="tab-content active">
-    <div class="stackedit__html" id="guideContent"></div>
-  </div>
-
-  <!-- ==================== TROUBLESHOOTING TAB ==================== -->
-  <div id="troubleshooting" class="tab-content">
-    <h2>Troubleshooting</h2>
-
-    <!-- CATEGORY CARDS -->
-    <div class="cat-grid" id="catGrid">
-      <div class="cat-card" onclick="jumpToCategory('mac')">
-        <div class="cat-title">Mac</div>
-        <div class="cat-sub">Accessibility, permissions, macOS fixes</div>
+        <div class="brand-title">
+          <span class="brand">Revolution Macro</span>
+          <span class="typingWrap">
+            <span class="typing" id="typingWord"></span><span class="caret" id="typingCaret">|</span>
+          </span>
+        </div>
       </div>
-      <div class="cat-card" onclick="jumpToCategory('windows')">
-        <div class="cat-title">Windows</div>
-        <div class="cat-sub">Capture mode, drivers, Windows fixes</div>
-      </div>
-      <div class="cat-card" onclick="jumpToCategory('macro')">
-        <div class="cat-title">Macro</div>
-        <div class="cat-sub">Settings, patterns, routing, resets</div>
-      </div>
-      <div class="cat-card" onclick="jumpToCategory('pro')">
-        <div class="cat-title">Pro</div>
-        <div class="cat-sub">Advanced tips, high efficiency setups</div>
+
+      <div class="header-actions">
+        <a class="pill-link" href="https://github.com/RevolutionGuides/revolutionmacroguide/issues" target="_blank" rel="noopener noreferrer">
+          Open Issues
+        </a>
+        <a class="pill-link" href="https://github.com/RevolutionGuides/revolutionmacroguide/issues/new?template=troubleshooting.yml" target="_blank" rel="noopener noreferrer">
+          Submit Fix
+        </a>
       </div>
     </div>
 
-    <input id="search" type="text" placeholder="Search issues..."
-      style="width:100%;padding:10px;font-size:16px;margin-bottom:20px;">
+    <div class="header-tabs">
+      <button class="tab-btn active" id="tabGuideBtn" type="button" data-tab="guide">
+        <span class="tab-dot"></span> Clickpath Guide
+      </button>
+      <button class="tab-btn" id="tabTroubleBtn" type="button" data-tab="troubleshooting">
+        <span class="tab-dot"></span> Troubleshooting
+      </button>
+    </div>
+  </header>
 
-    <div id="issues"></div>
-  </div>
+  <main class="app">
+    <div class="layout">
+      <!-- Desktop sticky sidebar (Guide quick jump) -->
+      <aside id="side" class="side" aria-label="Quick Jump">
+        <div class="side-header">
+          <div class="side-title">Quick Jump</div>
+        </div>
+        <nav id="guideNav" class="side-links"></nav>
+      </aside>
 
-  <button id="backToTop">↑ Top</button>
+      <!-- Main content -->
+      <section class="main">
+        <div class="panel">
+          <!-- ==================== GUIDE TAB ==================== -->
+          <div id="guide" class="tab-content active">
+            <div class="stackedit__html" id="guideContent"></div>
+          </div>
+
+          <!-- ==================== TROUBLESHOOTING TAB ==================== -->
+          <div id="troubleshooting" class="tab-content">
+            <div class="ts-head">
+              <div>
+                <h2 class="ts-title">Troubleshooting</h2>
+                <p class="ts-sub">
+                  Pick a category, search within it, and expand an entry for the exact fix. If you found a new solution, submit it using the button in the header.
+                </p>
+              </div>
+            </div>
+
+            <!-- Category cards (clear UX) -->
+            <div class="cat-grid" id="catGrid">
+              <div class="cat-card" data-cat="mac">
+                <div class="cat-title"><span class="emoji">:computer:</span> Mac</div>
+                <div class="cat-sub">Accessibility, permissions, macOS fixes</div>
+              </div>
+              <div class="cat-card" data-cat="windows">
+                <div class="cat-title"><span class="emoji">:windows:</span> Windows</div>
+                <div class="cat-sub">Capture mode, drivers, Windows fixes</div>
+              </div>
+              <div class="cat-card" data-cat="macro">
+                <div class="cat-title"><span class="emoji">:robot:</span> Macro</div>
+                <div class="cat-sub">Settings, patterns, routing, resets</div>
+              </div>
+              <div class="cat-card" data-cat="pro">
+                <div class="cat-title"><span class="emoji">🧑‍🚒</span> Pro</div>
+                <div class="cat-sub">Advanced tips, high efficiency setups</div>
+              </div>
+            </div>
+
+            <!-- Toolbar -->
+            <div class="ts-toolbar">
+              <div class="ts-search" title="Search current category">
+                <span class="icon">⌕</span>
+                <input id="tsSearch" type="text" placeholder="Search fixes..." />
+              </div>
+
+              <button id="allCatsBtn" class="ts-filter-pill active" type="button">All</button>
+              <button class="ts-filter-pill" type="button" data-filter="mac">:computer: Mac</button>
+              <button class="ts-filter-pill" type="button" data-filter="windows">:windows: Windows</button>
+              <button class="ts-filter-pill" type="button" data-filter="macro">:robot: Macro</button>
+              <button class="ts-filter-pill" type="button" data-filter="pro">🧑‍🚒 Pro</button>
+            </div>
+
+            <!-- Issues list -->
+            <div id="issues" class="issues-wrap"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <button id="backToTop" type="button">↑ Top</button>
 
   <!-- Markdown renderer -->
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
   <script>
-    // Smooth scroll helper with offset for fixed topbar (prevents "jump" feel)
-    function smoothScrollToEl(el) {
-      if (!el) return;
-      const topbar = document.querySelector('.topbar');
-      const tabbar = document.querySelector('.tab-buttons');
-      const offset = (topbar ? topbar.offsetHeight : 0) + (tabbar ? tabbar.offsetHeight : 0) + 14;
+    /**********************
+     * Utility: Emoji shortcodes used in your JSON titles
+     * (GitHub issues often use :computer: etc)
+     **********************/
+    function expandEmojiShortcodes(str){
+      if (!str) return str;
+      return str
+        .replaceAll(":computer:", "💻")
+        .replaceAll(":windows:", "🪟")
+        .replaceAll(":robot:", "🤖");
+      // firefighter is already unicode 🧑‍🚒 in your request
+    }
 
+    /**********************
+     * Smooth scroll w/ header offset (fixes "jump")
+     **********************/
+    function scrollToWithOffset(el){
+      if (!el) return;
+      const header = document.querySelector(".app-header");
+      const offset = (header ? header.offsetHeight : 0) + 14;
       const y = el.getBoundingClientRect().top + window.pageYOffset - offset;
       window.scrollTo({ top: y, behavior: "smooth" });
     }
 
-    function openTab(tab) {
-      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-      document.querySelectorAll('.tab-buttons button').forEach(el => el.classList.remove('active'));
-      document.getElementById(tab).classList.add('active');
-      document.querySelector(`.tab-buttons button[onclick="openTab('${tab}')"]`).classList.add('active');
+    /**********************
+     * Tabs (header buttons)
+     **********************/
+    const tabBtns = [document.getElementById("tabGuideBtn"), document.getElementById("tabTroubleBtn")];
 
-      const nav = document.getElementById("guideNav");
-      const body = document.body;
+    function openTab(tabId){
+      document.querySelectorAll(".tab-content").forEach(el => el.classList.remove("active"));
+      document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
 
-      const showNav = (tab === "guide");
-      if (nav) nav.style.display = showNav ? "block" : "none";
-      body.classList.toggle("withNav", showNav);
-    }
+      const active = document.getElementById(tabId);
+      if (active) active.classList.add("active");
 
-    // Jump to category section within troubleshooting tab
-    function jumpToCategory(key) {
-      openTab('troubleshooting');
-      setTimeout(() => {
-        const el = document.getElementById(`cat-${key}`);
-        if (el) smoothScrollToEl(el);
-      }, 80);
-    }
+      const btn = document.querySelector(`.tab-btn[data-tab="${tabId}"]`);
+      if (btn) btn.classList.add("active");
 
-    async function fetchJsonWithFallback() {
-      // IMPORTANT:
-      // GitHub Pages commonly does NOT serve dot-folders reliably (like ".github/").
-      // So we try the root path first (recommended), then fallback.
-      const tries = [
-        `troubleshooting.json?v=${Date.now()}`,
-        `.github/troubleshooting.json?v=${Date.now()}`
-      ];
+      // Sidebar only for guide
+      const showNav = (tabId === "guide");
+      document.getElementById("side").style.display = showNav ? "block" : "none";
 
-      let lastErr = null;
+      // Close drawer on tab switch (mobile)
+      closeDrawer();
 
-      for (const url of tries) {
-        try {
-          const res = await fetch(url, { cache: "no-store" });
-          if (!res.ok) throw new Error(`Fetch failed (${res.status}) for ${url}`);
-          return await res.json();
-        } catch (e) {
-          lastErr = e;
-        }
-      }
-
-      throw lastErr || new Error("Failed to load JSON.");
-    }
-
-    async function loadIssues() {
-      try {
-        const data = await fetchJsonWithFallback();
-        displayIssues(data);
-      } catch (err) {
-        console.error("Error loading troubleshooting.json", err);
-        const container = document.getElementById('issues');
-        if (container) {
-          container.innerHTML = `
-            <div class="section-empty">
-              Could not load <b>troubleshooting.json</b>.
-              <br><br>
-              Best fix: move the file to the repo root as <b>/troubleshooting.json</b>.
-              <br>
-              (Fallback: <b>.github/troubleshooting.json</b>)
-            </div>`;
-        }
+      // If troubleshooting, make sure issues are loaded at least once
+      if (tabId === "troubleshooting") {
+        ensureIssuesLoaded();
       }
     }
 
-    function displayIssues(issues) {
-      const container = document.getElementById('issues');
-      container.innerHTML = "";
-
-      const sections = [
-        { key: "mac", title: "Mac Issues" },
-        { key: "windows", title: "Windows Issues" },
-        { key: "macro", title: "Macro Issues" },
-        { key: "pro", title: "Pro Issues" }
-      ];
-
-      const normalized = (issues || []).map(i => ({
-        title: i.title || "",
-        solution: i.solution || "",
-        category: (i.category || "").toLowerCase().trim()
-      }));
-
-      sections.forEach(section => {
-        const header = document.createElement("h3");
-        header.className = "section-title";
-        header.textContent = section.title;
-        header.id = `cat-${section.key}`;
-        container.appendChild(header);
-
-        const items = normalized.filter(i => i.category === section.key);
-
-        if (items.length === 0) {
-          const empty = document.createElement("div");
-          empty.className = "section-empty";
-          empty.textContent = "No entries yet.";
-          container.appendChild(empty);
-          return;
-        }
-
-        items.forEach(issue => {
-          const block = document.createElement('div');
-          block.className = "issue-block";
-
-          const title = document.createElement('div');
-          title.className = "issue-title";
-          title.textContent = issue.title;
-
-          const body = document.createElement('div');
-          body.className = "issue-body";
-          body.innerHTML = issue.solution;
-
-          title.onclick = () => {
-            body.style.display = body.style.display === "none" ? "block" : "none";
-          };
-
-          block.appendChild(title);
-          block.appendChild(body);
-          container.appendChild(block);
-        });
-      });
-    }
-
-    document.getElementById("search").addEventListener("input", function () {
-      const q = this.value.toLowerCase();
-      document.querySelectorAll(".issue-block").forEach(block => {
-        const t = block.querySelector(".issue-title").textContent.toLowerCase();
-        const b = block.querySelector(".issue-body").textContent.toLowerCase();
-        block.style.display = (t.includes(q) || b.includes(q)) ? "block" : "none";
-      });
+    tabBtns.forEach(btn => {
+      btn.addEventListener("click", () => openTab(btn.dataset.tab));
     });
 
-    // Back to top
+    /**********************
+     * Mobile Drawer (Quick Jump)
+     **********************/
+    const drawer = document.getElementById("drawer");
+    const drawerBackdrop = document.getElementById("drawerBackdrop");
+    const hamburger = document.getElementById("hamburger");
+
+    function openDrawer(){
+      drawer.classList.add("open");
+      drawerBackdrop.classList.add("open");
+      drawer.setAttribute("aria-hidden", "false");
+      drawerBackdrop.setAttribute("aria-hidden", "false");
+    }
+    function closeDrawer(){
+      drawer.classList.remove("open");
+      drawerBackdrop.classList.remove("open");
+      drawer.setAttribute("aria-hidden", "true");
+      drawerBackdrop.setAttribute("aria-hidden", "true");
+    }
+
+    hamburger.addEventListener("click", () => {
+      if (drawer.classList.contains("open")) closeDrawer();
+      else openDrawer();
+    });
+    drawerBackdrop.addEventListener("click", closeDrawer);
+
+    /**********************
+     * Back to top
+     **********************/
     const backToTop = document.getElementById("backToTop");
     window.addEventListener("scroll", () => {
-      backToTop.style.display = window.scrollY > 300 ? "block" : "none";
+      backToTop.style.display = window.scrollY > 380 ? "block" : "none";
     });
-    backToTop.addEventListener("click", () => {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    });
+    backToTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
 
-    // ===== Animated title typing (slower + caret follows) =====
-    (function titleTypewriter() {
+    /**********************
+     * Typewriter (slower, caret visually follows text)
+     **********************/
+    (function titleTypewriter(){
       const el = document.getElementById("typingWord");
       if (!el) return;
 
       const words = ["Guide", "Troubleshooting Help"];
-      let w = 0;
-      let i = 0;
-      let deleting = false;
+      let w = 0, i = 0, deleting = false;
 
-      function tick() {
+      function tick(){
         const word = words[w];
 
-        if (!deleting) {
+        if (!deleting){
           i++;
           el.textContent = word.slice(0, i);
-          if (i >= word.length) {
+          if (i >= word.length){
             deleting = true;
-            return setTimeout(tick, 1500);
+            return setTimeout(tick, 1600);
           }
-          return setTimeout(tick, 95);   // slower typing
+          return setTimeout(tick, 110); // slower typing
         } else {
           i--;
           el.textContent = word.slice(0, i);
-          if (i <= 0) {
+          if (i <= 0){
             deleting = false;
             w = (w + 1) % words.length;
-            return setTimeout(tick, 420);
+            return setTimeout(tick, 520);
           }
-          return setTimeout(tick, 65);   // slower delete
+          return setTimeout(tick, 75); // slower delete
         }
       }
-
       tick();
     })();
 
-    // FULL GUIDE (verbatim). Do not edit anything inside this string.
+    /**********************
+     * FULL GUIDE (verbatim). Do not edit inside this string.
+     **********************/
     const guideMarkdown = `# Revolution Macro Guide and Fixes
 
 Use this for reference!
@@ -735,202 +978,93 @@ Default Key Binds:
 - Disable Gathering: Wait for tasks and prevent the macro from farming honey
 - Use Dipper: Hold/Auto click your mouse
 - Inactive Honey Timeout: Maximum amount of seconds before the macro stop gathering if no honey is being made, default is 10 seconds
-- Full Bag Timeout: Maximum amount of seconds before stopping gathering if your capacity (aka. backpack) is full. The default is 5 but if it isn't working change to 0 or 1 seconds
-- Sprinkler spacing: The distance between each sprinklers in studs unit, Only work on non Supreme sprinklers
+- Full Bag Timeout: Maximum amount of seconds before stopping gathering if your capacity (aka. backpack) is full.
 
-### Conversion
-- Finish Conversion After Balloon Refresh: Stop converting as soon as your balloon blessing refresh
-- Config this page to your needs, like minimum balloon blessing
+### Drift
+- Detect Drift: Detects when you are going away from the center
+- Enable Drift Compensation: Uses drift compensation if your character is drifting (also impacts camera drift)
+- Enable Camera Drift Compensation: Uses camera drift compensation
 
-### Field Defaults
-- Every field's settings, used mainly for quests
-- Also default presets when you add a new field to the target fields
-
-## AI Gather
-
-### settings
-- Maximum Model FPS: 10 is recommended, higher results in diminishing return
-- Use Full Model: Only turn this on if it's not working normally
-- Loot Mode: For collecting non-ability tokens
-- Eco Mode: Use a smaller model, NOT supported on Windows 10
-
-### Token Priority
-- Drag around the tokens in the list to reorder them, you can also type in the numbers manually
-- Higher = More priority
+### Pathing
+- Pattern: Picks the gathering pattern, default is cornerxsnake
+- Use Custom Pattern: Make your own gathering pattern
+- Use Natro Pattern: Uses natro's pattern
+- Use Pattern Annotation: Draws the pattern on your screen
+- Use Field Drift Compensation: Uses drift compensation relative to the field
 
 # Collect Tab (2)
 
-## Dispensers
+## General
+- Convert At: When to convert honey in your hive, default is 95%
+- Convert: Turns conversion on or off
+- Convert On Full: Converts when your bag is full, regardless of convert at
+- Convert With 0 Honey: Converts when you have 0 honey (not recommended)
+- Convert With 0 Honey Timeout: Maximum amount of seconds before converting with 0 honey
+- Reset After Convert: Resets after conversion
 
-- Enable "Wealth Clock" as all macro needs it
-- Other dispensers are Blueberry, Strawberry, Coconut, Glue, Robo pass, Ant pass
+## Conversion
+- Use Converter: Uses the converter in your hive
+- Use Micro Converter: Uses micro converter
+- Use Balloon: Uses balloon
 
-## Bug Run
+## Snowflakes
+- Gather Snowflakes: Collects snowflakes
 
-- If you have gifted vicious bee, set "Monster Respawn Percent" to "15%"
-- You can config each bug/creatures killing, looting, minimum time between kills
-
-## Quests
-
-### Polar Bear
- - Polar Bear Enabled: Turn this on if you lack polar power. If you have >1000, enable.
- - Gather Interrupt: Will do the quest as soon as possible
- - Priority: Work in progress
-
-## Buffs
-
-### Sticker Stack
-- Optional
-
-### Mondo Chick
-- Recommended to enable Mondo Chick if you're underfilling or have an attack alt account
-- Gather Interrupt: Stop gathering to fight mondo chick
-- Kill: Turning this on with AI Mondo Battle is recommended
-- AI Mondo Battle: Fight the Mondo Chick with AI or not, might be less consistent if you don't have enough damage or defense
-- Buff Time: If you don't have Kill turn on, set this to 60 seconds or 120 seconds
-
-### HQ Boosters
-- Enable your designated booster color
-- Recommended to gather in boosted field if you have alts to help your main account on the field
-
-## Bosses
-
-- WIP.
-
-## Blender
-
-- WIP.
+## Puffs
+- Enabled: Collects puffs
+- Puff Planter Type: Type of planter you are using for puff
+- Puff Planter Field: Field where you place puff planter
+- Puff Planter Interval: How often to check puffs
 
 # Planters Tab (3)
 
-- Duration (top left) Keep to "12" or "24" hours, 48 hours is also optional
-- Clear Schedule: clears planter schedule (collect all planters before clearing)
-- Refresh Schedule: refreshes planter schedule
-- Settings - Recommended to enable "Gather Loot", "Reset when Harvesting" Keep timeline mode to "Timer"
-
-## Auto Planters
+## Auto planters
 
 ### Settings
-- Disable Planter: Whether to plant or not
-- Gather Loot: Turn this on for materials
-- Pathfind When Planting: Tries to find the fastest walking route from field to field, if turned off the macro will reset and use the normal pathing and red cannon instead.
-- Reset When Harvesting: When disabled, Tries to walk field to field for planters harvesting. If enabled, will take the normal routing.
-
-### Auto planters
-#### Settings
 - Enabled: Turn this on for automatic planters, if not then it's manual mode
 - Degradation Multiplier: Default at 1.2x, ranges from 1.0 to 2.0, Encourage the algorithm to switch fields when placing the same planter
 - Build Nectars: The popular option is 2 Build and 1 Maintain, you can only have 3 active planters at once
 - Harvest Automatic: If disabled, you can choose your own min and max growth time for your planters
 - Harvest Fully Grown: Will only harvest when your planters is at 100%
-#### Nectar Goals
+
+### Nectar Goals
 - There are five types of Nectar: Invigorating, Satisfying, Motivating, Comforting and Refreshing
 - You can set your own target percentage for each nectars
 - You can drag them up or down to swap/change priority level
-#### Fields
+
+### Fields
 - You can select each fields to enable/disable planting in that field
-- Set what planters can each fields have
-#### Planters
-- Enable/Disable each planters and target fields
 
 # Status Tab (4)
 
-## Logs
+## General
+- Shows your current status, what the macro is doing
 
-- Open Logs Folder: View all log files
-- Copy Logs: Copy the latest logs to your clipboard
-- Reset Settings: Restore everything to the default
+## Stats
+- Displays macro statistics, honey per hour, average honey per hour, etc
 
-## Webhook
-
-How to connect your macro to a Discord Webhook **(Recommended)**
-
-1. Make a new Discord server
-2. Edit/Press the gear icon on the "general" text channel (has gear icon on the right)
-3. Once you open text channel settings, go to integrations Click Webhooks, and make a new Webhooks
-4. Copy the Webhook URL, and open Revolution Macro Paste the Webhook URL in the macro in the Status tab -> Webhook
-5. Add your discord ID for pings if something goes wrong (optional)
-6. To do step 5, turn on developer mode on Discord, and copy your ID and post it into the macro under webhooks
-
-Hourly graphs are automatically processed by the macro and sent via webhook.
-
-## Bot
-
-How to setup the Revolution Macro Discord bot **(Recommended)**
-
-1. Create a new Discord bot with the correct permissions and add it to your server (There's online guides for this)
-2. Copy the bot token and paste it into Status tab -> Bot -> Bot Token
-3. Set the Bot Channel to your Discord server's logging channel
-4. Command prefix can remain the same
-5. Enable Slash commands for better ease of use
-
-Run /report for an instant hourly graph report. Hourly graphs are sent automatically.
+## Discord
+- Discord Rich Presence: Shows your status on discord
 
 # Tools Tab (5)
 
-## Auto Jelly
+## General
+- Rejoin: Rejoins the server
+- Respawn: Respawns your character
+- Leave: Leaves the server
 
-- Pick the bee you want the macro to auto-jelly on
-- Enable the options you want for the bee such as Stop On Mythic or Require Mutation
-- You can select the mutation type you want
+## Packs
+- Enabled: Collects packs
+- Use Natro Pack List: Uses natro's pack list
 
-## RBC Gather
+## Quests
+- Enabled: Completes quests
+- Use Quest Menu: Uses the quest menu
 
-### General
-- Enabled: Off or On
-- Role: Main account or Fuzzy bee account
-- Field Navigation Mode: Hard to Easy, Easy to Hard, Manual
-
-### Alt
-- Rejoin Server On Reset: May be faster than letting your fuzzy alt recover
-- Disable Reset When Navigating: Your alt will attempt to move to your field without resetting
-- Maximum Alts On Field: Any number
-- Detect Quests After Round: Minimum RBC round before the macro starts moving your alt to the quest fields
-
-### Hotkeys
-- Configure to your liking
-
-### Field Picker
-- Select an alt and configure it
-- Remember to connect your alt revolution macro instances to the relay network
-
-## Tad Sync
-
-### General
-- Enabled: Off or On
-- Role: Main or Alt account
-- Use Best Pine Alt Pattern: Pine tree field movement pattern for the tadpole alt
-- Use Best Bamboo Alt Pattern: Bamboo field movement pattern for the tadpole alt
-- Use Best Blue Flower Alt Pattern: Blue flow field movement pattern for the tadpole alt
-
-### Alt
-- Select an alt and configure it
-- Make sure it's connected to the relay
-
-## Vic Hop
-
-### General
-- Server Hop is optional
-- If you are doing Vic Hop with no searches, enable "Role" to "Main" so your account kills the vicious.
-- Enable everything in the "main" tab and disable everything in the "Searcher" tab. This is only if you aren’t using mains
-
-### Main
-- Claim Hive When Searching: claim a hive slot before finding wild vicious bee
-- Join New Battles: Go into battles that other player started
-- Join In-Progress Battles: Join already on-going battles
-- Vicious Bee Minimum Health: Minimum HP percentage for the Join In-Progress Battles option
-
-### Searcher
-- Skip Spider Search: Skip Spider Field when searching
-- Skip Pepper Search: Skip Pepper Field when searching
-- Join Empty Servers: Unknown if this actually helps with how much stingers you can get
-- Re-Open Roblox After: Set to any hours (default is 2 hours)
-
-## Mondo Hop
-
-- Enabled: Off or On
-- Role: Main or Searcher
-- Loot For Seconds: Amount of time the macro will loot mondo chick after it dies
+## Mobs
+- Enabled: Kills mobs
+- Use Mondo Hop: Hops mondo chick
+- Use Vicious Bee Hop: Hops vicious bee
 
 # Settings Tab (6)
 
@@ -970,7 +1104,6 @@ Run /report for an instant hourly graph report. Hourly graphs are sent automatic
 - Fallback the Public Server: Join public servers if the macro is having trouble joining the private server
 
 ## Networking
-
 - Identity: Your current network identity (differs in RDPs)
 - Relay: Click start
 - Auto-Start: Turn this on if you're constantly using alts
@@ -978,112 +1111,104 @@ Run /report for an instant hourly graph report. Hourly graphs are sent automatic
 - Available Relays: Click the plus icon to add a relay, Click the entry icon on your added relay to join it, Click the star icon to your added relay to remove it
 
 ## Presets
-
 - WIP.
 
 ## Accounts
-
 - WIP.
 
 ## Credits
-
-- List of people who helped develop and donate to the macro
+- List of people who helped developed the macro and donators
 
 ----
-made by draco
+made by draco/imes ^^`;
 
-credits: imes, Justzero
-
-Skillet Pine Tree - Diamond/Gold/Silver Sprinklers
-{"name":"Skillet Pine Tree - Diamond/Gold/Silver Sprinklers","position":"bottom-right","length":4,"width":0,"distance":6,"yaw":4,"backpackPercent":95,"seconds":900,"gatherPattern":"Skillet","field":"pinetree"}
-
-
-
-
-Skillet Pine Tree - Supreme Saturator
-{"name":"Skillet Pine Tree - Supreme Saturator","position":"bottom-right","length":4,"width":0,"distance":3,"yaw":4,"backpackPercent":95,"seconds":900,"gatherPattern":"Skillet","field":"pinetree"}
-
-
-
-AI Gather Pine Tree - Supreme Saturator
-{"name":"AI Gather Pine Tree - Supreme Saturator","position":"center","length":4,"width":0,"distance":3,"yaw":2,"backpackPercent":95,"seconds":900,"driftComp":true,"gatherPattern":"AI Gather","field":"pinetree"}`;
     document.getElementById("guideContent").innerHTML = marked.parse(guideMarkdown);
 
-    // ===== Guide side navigation builder =====
-    function slugify(text) {
-      return text.toLowerCase().trim()
-        .replace(/[^\w\s-]/g, "")
+    /**********************
+     * Build Guide Nav (Quick Jump) + Active tracking
+     **********************/
+    function slugify(text){
+      return (text || "")
+        .toLowerCase()
+        .replace(/[^a-z0-9\s-]/g, "")
+        .trim()
         .replace(/\s+/g, "-");
     }
 
-    function buildGuideNav() {
+    function buildGuideNav(){
+      const guideRoot = document.getElementById("guideContent");
       const nav = document.getElementById("guideNav");
-      const guide = document.getElementById("guideContent");
-      if (!nav || !guide) return;
+      const drawerLinks = document.getElementById("drawerLinks");
 
-      nav.innerHTML = "";
+      if (!guideRoot || !nav || !drawerLinks) return;
 
-      const title = document.createElement("div");
-      title.className = "nav-title";
-      title.textContent = "Quick Jump";
-      nav.appendChild(title);
+      const headings = guideRoot.querySelectorAll("h1, h2");
+      const targets = [];
 
-      const targets = [
-        "Gather Tab (1)",
-        "Collect Tab (2)",
-        "Planters Tab (3)",
-        "Status Tab (4)",
-        "Tools Tab (5)",
-        "Settings Tab (6)"
-      ];
-
-      const headings = guide.querySelectorAll("h1, h2, h3");
       headings.forEach(h => {
-        if (!h.id) h.id = slugify(h.textContent);
+        const txt = h.textContent.trim();
+        if (!txt) return;
+        // Only jump headings we care about (keeps sidebar clean)
+        // Keep this simple: include all h1/h2 from your markdown
+        const id = slugify(txt);
+        h.id = id;
+        targets.push({ id, text: txt });
       });
 
-      targets.forEach(label => {
-        const id = slugify(label);
-        const el = document.getElementById(id);
-        if (!el) return;
+      nav.innerHTML = "";
+      drawerLinks.innerHTML = "";
 
+      targets.forEach(t => {
         const a = document.createElement("a");
-        a.href = `#${id}`;
-        a.textContent = label;
-        a.dataset.target = id;
+        a.href = `#${t.id}`;
+        a.dataset.target = t.id;
+        a.textContent = t.text;
 
         a.addEventListener("click", (e) => {
           e.preventDefault();
-          smoothScrollToEl(el);
-          history.replaceState(null, "", `#${id}`);
+          const el = document.getElementById(t.id);
+          scrollToWithOffset(el);
+          history.replaceState(null, "", `#${t.id}`);
+          closeDrawer();
+        });
+
+        // Clone for drawer
+        const b = a.cloneNode(true);
+        b.addEventListener("click", (e) => {
+          e.preventDefault();
+          const el = document.getElementById(t.id);
+          scrollToWithOffset(el);
+          history.replaceState(null, "", `#${t.id}`);
+          closeDrawer();
         });
 
         nav.appendChild(a);
+        drawerLinks.appendChild(b);
       });
 
-      nav.style.display = "block";
-      setupActiveNavTracking(nav, targets.map(t => slugify(t)));
+      setupActiveNavTracking(nav, targets.map(x => x.id));
     }
 
-    // Active highlight as you scroll (premium feel)
-    function setupActiveNavTracking(nav, ids) {
+    function setupActiveNavTracking(nav, ids){
       if (!("IntersectionObserver" in window)) return;
-
       const links = Array.from(nav.querySelectorAll("a[data-target]"));
       const map = new Map(links.map(a => [a.dataset.target, a]));
 
       const obs = new IntersectionObserver((entries) => {
         const visible = entries
           .filter(e => e.isIntersecting)
-          .sort((a, b) => (a.boundingClientRect.top - b.boundingClientRect.top));
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
 
-        if (visible.length === 0) return;
+        if (!visible.length) return;
+
         const id = visible[0].target.id;
-
         links.forEach(a => a.classList.remove("active"));
         const link = map.get(id);
         if (link) link.classList.add("active");
-      }, { root: null, threshold: 0.25, rootMargin: "-20% 0px -70% 0px" });
+      }, {
+        threshold: 0.25,
+        rootMargin: "-25% 0px -65% 0px"
+      });
 
       ids.forEach(id => {
         const el = document.getElementById(id);
@@ -1093,15 +1218,223 @@ AI Gather Pine Tree - Supreme Saturator
 
     buildGuideNav();
 
-    // Start in Guide tab with sidebar enabled
-    const nav = document.getElementById("guideNav");
-    if (nav) nav.style.display = "block";
-    document.body.classList.add("withNav");
+    /**********************
+     * Copy buttons (auto-add to all pre>code)
+     **********************/
+    function addCopyButtons(root){
+      const blocks = (root || document).querySelectorAll("pre");
+      blocks.forEach(pre => {
+        if (pre.querySelector(".copy-btn")) return;
 
-    loadIssues();
+        const btn = document.createElement("button");
+        btn.className = "copy-btn";
+        btn.type = "button";
+        btn.textContent = "Copy";
+
+        btn.addEventListener("click", async () => {
+          const code = pre.querySelector("code");
+          const text = code ? code.innerText : pre.innerText;
+
+          try{
+            await navigator.clipboard.writeText(text);
+            btn.classList.add("copied");
+            btn.textContent = "Copied";
+            setTimeout(() => {
+              btn.classList.remove("copied");
+              btn.textContent = "Copy";
+            }, 900);
+          }catch(e){
+            btn.textContent = "Failed";
+            setTimeout(() => (btn.textContent = "Copy"), 900);
+          }
+        });
+
+        pre.appendChild(btn);
+      });
+    }
+
+    addCopyButtons(document.getElementById("guideContent"));
+
+    /**********************
+     * Troubleshooting: loading + UX
+     **********************/
+    let TROUBLE_CACHE = null;
+    let TROUBLE_LOADED = false;
+
+    function getRepoContext(){
+      // If hosted on GitHub Pages, we can try to infer owner/repo from location or hardcode.
+      // Hardcode your repo since it’s stable:
+      return { owner: "RevolutionGuides", repo: "revolutionmacroguide", branch: "main" };
+    }
+
+    async function fetchTroubleJson(){
+      const { owner, repo, branch } = getRepoContext();
+      const cacheBust = Date.now();
+
+      // 1) root (recommended)
+      // 2) .github/ (may fail on Pages)
+      // 3) raw.githubusercontent.com (reliable)
+      const tries = [
+        `troubleshooting.json?v=${cacheBust}`,
+        `.github/troubleshooting.json?v=${cacheBust}`,
+        `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/.github/troubleshooting.json?v=${cacheBust}`,
+        `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/troubleshooting.json?v=${cacheBust}`,
+      ];
+
+      let lastErr = null;
+      for (const url of tries){
+        try{
+          const res = await fetch(url, { cache: "no-store" });
+          if (!res.ok) throw new Error(`Fetch failed (${res.status}) for ${url}`);
+          return await res.json();
+        }catch(e){
+          lastErr = e;
+        }
+      }
+      throw lastErr || new Error("Failed to load troubleshooting.json");
+    }
+
+    async function ensureIssuesLoaded(){
+      if (TROUBLE_LOADED) return;
+      TROUBLE_LOADED = true;
+
+      const container = document.getElementById("issues");
+      container.innerHTML = `<div class="empty">Loading fixes…</div>`;
+
+      try{
+        const data = await fetchTroubleJson();
+        TROUBLE_CACHE = (data || []).map(i => ({
+          title: expandEmojiShortcodes(i.title || ""),
+          category: (i.category || "").toLowerCase().trim(),
+          solution: expandEmojiShortcodes(i.solution || ""),
+        }));
+        renderTroubleshooting();
+      }catch(err){
+        console.error(err);
+        container.innerHTML = `
+          <div class="empty">
+            Could not load <b>troubleshooting.json</b>.<br><br>
+            Best fix for GitHub Pages: also keep a copy at repo root as <b>/troubleshooting.json</b>.<br>
+            (This page also tries a raw GitHub fallback.)
+          </div>`;
+      }
+    }
+
+    // State
+    let activeCat = "all";
+    let searchQ = "";
+
+    const tsSearch = document.getElementById("tsSearch");
+    tsSearch.addEventListener("input", (e) => {
+      searchQ = (e.target.value || "").toLowerCase();
+      renderTroubleshooting();
+    });
+
+    // Category cards click => activate filter
+    document.querySelectorAll(".cat-card").forEach(card => {
+      card.addEventListener("click", () => {
+        setCategory(card.dataset.cat || "all");
+        // Scroll down to issues list smoothly for UX clarity
+        const issuesEl = document.getElementById("issues");
+        if (issuesEl) setTimeout(() => scrollToWithOffset(issuesEl), 40);
+      });
+    });
+
+    // Filter pills
+    const allCatsBtn = document.getElementById("allCatsBtn");
+    allCatsBtn.addEventListener("click", () => setCategory("all"));
+    document.querySelectorAll(".ts-filter-pill[data-filter]").forEach(btn => {
+      btn.addEventListener("click", () => setCategory(btn.dataset.filter));
+    });
+
+    function setCategory(cat){
+      activeCat = cat || "all";
+
+      // active state on pills
+      document.querySelectorAll(".ts-filter-pill").forEach(p => p.classList.remove("active"));
+      if (activeCat === "all") allCatsBtn.classList.add("active");
+      else {
+        const pill = document.querySelector(`.ts-filter-pill[data-filter="${activeCat}"]`);
+        if (pill) pill.classList.add("active");
+      }
+
+      // active state on cards
+      document.querySelectorAll(".cat-card").forEach(c => c.classList.remove("active"));
+      if (activeCat !== "all"){
+        const card = document.querySelector(`.cat-card[data-cat="${activeCat}"]`);
+        if (card) card.classList.add("active");
+      }
+
+      renderTroubleshooting();
+    }
+
+    function renderTroubleshooting(){
+      const container = document.getElementById("issues");
+      if (!container) return;
+
+      const data = TROUBLE_CACHE || [];
+      const filtered = data.filter(item => {
+        const catOK = (activeCat === "all") ? true : item.category === activeCat;
+        if (!catOK) return false;
+
+        if (!searchQ) return true;
+        const t = (item.title || "").toLowerCase();
+        const b = (item.solution || "").toLowerCase();
+        return t.includes(searchQ) || b.includes(searchQ);
+      });
+
+      if (!filtered.length){
+        container.innerHTML = `<div class="empty">No matching entries yet.</div>`;
+        return;
+      }
+
+      container.innerHTML = "";
+      filtered.forEach((issue, idx) => {
+        const block = document.createElement("div");
+        block.className = "issue-block";
+
+        const btn = document.createElement("button");
+        btn.className = "issue-title";
+        btn.type = "button";
+
+        const left = document.createElement("div");
+        left.textContent = issue.title || "Untitled fix";
+
+        const chev = document.createElement("div");
+        chev.className = "chev";
+        chev.textContent = "▾";
+
+        btn.appendChild(left);
+        btn.appendChild(chev);
+
+        const body = document.createElement("div");
+        body.className = "issue-body";
+        body.innerHTML = issue.solution || "";
+
+        btn.addEventListener("click", () => {
+          const open = body.classList.toggle("open");
+          chev.style.transform = open ? "rotate(180deg)" : "rotate(0deg)";
+          // Add copy buttons inside solution if there are code blocks
+          if (open) addCopyButtons(body);
+        });
+
+        // Optional: open first item for better UX if filtered is small
+        // (Comment out if you don't want auto-open)
+        // if (idx === 0 && filtered.length <= 2) { btn.click(); }
+
+        block.appendChild(btn);
+        block.appendChild(body);
+        container.appendChild(block);
+      });
+    }
+
+    /**********************
+     * Default: start in Guide
+     **********************/
+    openTab("guide");
+
   </script>
-
 </body>
-
 </html>
+
 
