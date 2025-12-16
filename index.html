@@ -8,49 +8,41 @@
   <!-- StackEdit base typography -->
   <link rel="stylesheet" href="https://stackedit.io/style.css" />
 
-  <!-- Favicon (inline SVG) -->
+  <!-- Favicon -->
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3CradialGradient id='g' cx='50%25' cy='40%25' r='70%25'%3E%3Cstop offset='0%25' stop-color='%2324f0ff' stop-opacity='1'/%3E%3Cstop offset='60%25' stop-color='%2324f0ff' stop-opacity='.35'/%3E%3Cstop offset='100%25' stop-color='%23090b10' stop-opacity='1'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='14' fill='url(%23g)'/%3E%3Cpath d='M18 40c7-12 12-17 18-17 6 0 9 4 10 10-2 10-8 15-18 15-5 0-8-2-10-8z' fill='%23090b10' opacity='.9'/%3E%3Cpath d='M20 38c6-10 10-14 16-14 5 0 7 3 8 8-2 8-7 12-16 12-4 0-6-2-8-6z' fill='%2324f0ff' opacity='.9'/%3E%3C/svg%3E" />
 
   <style>
     :root{
-      /* Requested page blue (tweak here if you want it slightly lighter/darker) */
       --pageBlue: #0b78ff;
 
-      --panel: rgba(12, 14, 18, 0.86);
-      --panel2: rgba(20, 24, 33, 0.72);
+      --panel: rgba(12, 14, 18, 0.88);
+      --panel2: rgba(20, 24, 33, 0.70);
       --text: #e9e9ea;
       --muted: rgba(233,233,234,0.74);
 
       --neon: #24f0ff;
-      --neonSoft: rgba(36,240,255,0.18);
-
       --stroke: rgba(255,255,255,0.16);
       --stroke2: rgba(36,240,255,0.32);
 
       --shadow: 0 18px 46px rgba(0,0,0,0.28);
       --shadow2: 0 10px 28px rgba(0,0,0,0.22);
 
-      /* JS keeps this up-to-date from header.offsetHeight */
       --headerH: 96px;
 
-      /* Sidebar */
-      --navW: 180px;
+      --navW: 190px;
       --navGap: 18px;
       --navRadius: 18px;
 
-      --maxW: 1120px;
+      --maxW: 1160px;
     }
 
     *{ box-sizing: border-box; }
     html{ scroll-behavior: auto; }
-
     body{
       margin:0;
       font-family: Arial, sans-serif;
       color: var(--text);
       min-height: 100vh;
-
-      /* Premium background */
       background:
         radial-gradient(1200px 740px at 18% 10%, rgba(36,240,255,0.14), transparent 60%),
         radial-gradient(900px 640px at 85% 25%, rgba(36,240,255,0.10), transparent 55%),
@@ -58,7 +50,7 @@
         var(--pageBlue);
     }
 
-    /* ======================= SINGLE HEADER (fixed) ======================= */
+    /* ===== header ===== */
     .app-header{
       position: fixed;
       top:0; left:0; right:0;
@@ -90,7 +82,6 @@
       display:flex;
       align-items:baseline;
       gap:10px;
-      min-width: 220px;
       white-space: nowrap;
     }
 
@@ -111,7 +102,7 @@
       display:inline-flex;
       align-items:baseline;
       gap:4px;
-      min-width: 220px; /* prevents header layout shift */
+      min-width: 240px;
     }
     .typing{
       color: var(--neon);
@@ -147,7 +138,6 @@
       transition: transform .15s ease, border-color .15s ease, background .15s ease;
       display:inline-flex;
       align-items:center;
-      gap: 8px;
       user-select:none;
       cursor:pointer;
     }
@@ -157,7 +147,6 @@
       background: rgba(15,17,21,0.78);
     }
 
-    /* Mobile hamburger */
     .hamburger{
       display:none;
       width: 42px;
@@ -178,7 +167,6 @@
       background: rgba(15,17,21,0.78);
     }
 
-    /* Tabs row stays inside header */
     .header-tabs{
       display:flex;
       align-items:flex-end;
@@ -221,7 +209,7 @@
       box-shadow: 0 0 18px rgba(36,240,255,0.35);
     }
 
-    /* ======================= APP LAYOUT ======================= */
+    /* ===== app layout ===== */
     .app{
       padding-top: calc(var(--headerH) + 18px);
       padding-left: 18px;
@@ -241,7 +229,7 @@
       grid-template-columns: minmax(0, 1fr);
     }
 
-    /* ======================= SIDEBAR ======================= */
+    /* ===== sidebar ===== */
     .side{
       width: var(--navW);
       position: sticky;
@@ -320,7 +308,6 @@
       padding: 0 10px 14px;
     }
 
-    /* Sidebar top button now lives here */
     #sideTopBtn{
       margin-top: 10px;
       display:flex;
@@ -330,7 +317,7 @@
       font-weight: 1000;
     }
 
-    /* ======================= MAIN PANEL ======================= */
+    /* ===== panel ===== */
     .panel{
       border: 1px solid rgba(255,255,255,0.16);
       border-radius: 18px;
@@ -349,7 +336,6 @@
       to{ opacity: 1; transform: translateY(0); }
     }
 
-    /* StackEdit content legibility */
     .stackedit__html{ color: var(--text); }
     .stackedit__html h1, .stackedit__html h2, .stackedit__html h3, .stackedit__html h4,
     .stackedit__html p, .stackedit__html li{ color: var(--text); }
@@ -359,7 +345,24 @@
       text-decoration-color: rgba(36,240,255,0.35);
     }
 
-    /* Premium code blocks + copy button */
+    /* nicer section separators */
+    .stackedit__html h1,
+    .stackedit__html h2{
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.10);
+      position: relative;
+    }
+    .stackedit__html h1::after,
+    .stackedit__html h2::after{
+      content:"";
+      position:absolute;
+      left:0; right:0; bottom:-1px;
+      height:1px;
+      background: linear-gradient(90deg, transparent, rgba(36,240,255,0.28), transparent);
+      pointer-events:none;
+    }
+
+    /* copy buttons for code blocks */
     pre{
       position: relative;
       border-radius: 16px;
@@ -401,23 +404,24 @@
       box-shadow: 0 0 18px rgba(36,240,255,0.10);
     }
 
-    /* ======================= TROUBLESHOOTING UX ======================= */
-    .ts-head{
-      margin-bottom: 10px;
-    }
+    /* ===== troubleshooting ===== */
+    .ts-head{ margin-bottom: 10px; }
     .ts-title{
       margin: 0;
       font-size: 26px;
       font-weight: 1000;
       letter-spacing: 0.2px;
+      border: none !important;
+      padding-bottom: 0 !important;
     }
+    .ts-title::after{ display:none !important; }
+
     .ts-sub{
       margin: 8px 0 0;
       color: var(--muted);
       line-height: 1.35;
-      max-width: 720px;
+      max-width: 760px;
     }
-    /* Remove any accidental “thin line” under troubleshooting by not adding extra borders here */
 
     .ts-toolbar{
       display:flex;
@@ -511,17 +515,8 @@
       box-shadow: 0 0 0 1px rgba(36,240,255,0.14) inset, 0 0 34px rgba(36,240,255,0.12);
     }
 
-    .cat-title{
-      font-weight: 1000;
-      font-size: 18px;
-      color: var(--text);
-    }
-    .cat-sub{
-      color: var(--muted);
-      margin-top: 6px;
-      font-size: 13px;
-      line-height: 1.25;
-    }
+    .cat-title{ font-weight: 1000; font-size: 18px; color: var(--text); }
+    .cat-sub{ color: var(--muted); margin-top: 6px; font-size: 13px; line-height: 1.25; }
 
     .issues-wrap{
       margin-top: 10px;
@@ -555,9 +550,7 @@
       gap: 10px;
       user-select:none;
     }
-    .issue-title:hover{
-      background: rgba(15,17,21,0.35);
-    }
+    .issue-title:hover{ background: rgba(15,17,21,0.35); }
 
     .issue-title .chev{
       color: rgba(233,233,234,0.70);
@@ -571,10 +564,7 @@
       color: rgba(233,233,234,0.92);
       line-height: 1.45;
     }
-    .issue-body.open{
-      display:block;
-      animation: fadeInUp 180ms ease both;
-    }
+    .issue-body.open{ display:block; animation: fadeInUp 180ms ease both; }
 
     .empty{
       padding: 14px;
@@ -584,7 +574,7 @@
       background: rgba(10,12,16,0.30);
     }
 
-    /* Mobile floating top button (sidebar has top button on desktop) */
+    /* mobile */
     #backToTopMobile{
       position: fixed;
       right: 18px;
@@ -604,25 +594,20 @@
       color: var(--neon);
     }
 
-    /* ======================= MOBILE / RESPONSIVE ======================= */
     @media (max-width: 980px){
       .layout{ grid-template-columns: minmax(0, 1fr); }
       .side{ display:none; }
       .hamburger{ display:inline-flex; }
-
       .cat-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
-
     @media (max-width: 560px){
-      .brand-wrap{ min-width: 0; }
       .typingWrap{ min-width: 160px; }
       .cat-grid{ grid-template-columns: 1fr; }
-
       .pill-link{ padding: 10px 12px; }
       .tab-btn{ padding: 10px 12px; }
     }
 
-    /* ======================= SIDEBAR DRAWER (mobile) ======================= */
+    /* drawer (mobile quick jump) */
     .drawer-backdrop{
       position: fixed;
       inset: 0;
@@ -647,12 +632,7 @@
       box-shadow: var(--shadow);
       display:none;
     }
-    .drawer.open,
-    .drawer-backdrop.open{
-      display:block;
-      animation: fadeInUp 160ms ease both;
-    }
-
+    .drawer.open, .drawer-backdrop.open{ display:block; animation: fadeInUp 160ms ease both; }
   </style>
 </head>
 
@@ -736,7 +716,6 @@
               </p>
             </div>
 
-            <!-- Category cards (no emojis) -->
             <div class="cat-grid" id="catGrid">
               <div class="cat-card" data-cat="mac">
                 <div class="cat-title">Mac</div>
@@ -756,7 +735,6 @@
               </div>
             </div>
 
-            <!-- Search + filters -->
             <div class="ts-toolbar">
               <div class="ts-search" title="Search current category">
                 <span class="icon">Search</span>
@@ -770,7 +748,6 @@
               <button class="ts-filter-pill" type="button" data-filter="pro">Pro</button>
             </div>
 
-            <!-- Issues list -->
             <div id="issues" class="issues-wrap"></div>
           </div>
         </div>
@@ -778,16 +755,10 @@
     </div>
   </main>
 
-  <!-- Mobile-only floating top button -->
   <button id="backToTopMobile" type="button">Top</button>
 
-  <!-- Markdown renderer -->
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-
   <script>
-    /**********************
-     * Keep CSS --headerH synced to actual header height (fixes tab overflow + offsets)
-     **********************/
+    /* keep header height synced */
     function syncHeaderHeight(){
       const header = document.getElementById("appHeader");
       if (!header) return;
@@ -796,9 +767,7 @@
     }
     window.addEventListener("resize", syncHeaderHeight);
 
-    /**********************
-     * Smooth scroll with header offset (no jumping)
-     **********************/
+    /* smooth scroll with header offset */
     function scrollToWithOffset(el){
       if (!el) return;
       syncHeaderHeight();
@@ -808,9 +777,7 @@
       window.scrollTo({ top: y, behavior: "smooth" });
     }
 
-    /**********************
-     * Tabs
-     **********************/
+    /* tabs */
     const layout = document.getElementById("layout");
     const side = document.getElementById("side");
 
@@ -821,10 +788,9 @@
       const active = document.getElementById(tabId);
       if (active) active.classList.add("active");
 
-      const btn = document.querySelector(\`.tab-btn[data-tab="\${tabId}"]\`);
+      const btn = document.querySelector(`.tab-btn[data-tab="${tabId}"]`);
       if (btn) btn.classList.add("active");
 
-      // Sidebar visible only for guide tab (and layout should fill when hidden)
       const showNav = (tabId === "guide");
       if (showNav){
         side.style.display = "block";
@@ -835,19 +801,15 @@
       }
 
       closeDrawer();
-
       if (tabId === "troubleshooting") ensureIssuesLoaded();
 
-      // Keep header offsets correct
       syncHeaderHeight();
     }
 
     document.getElementById("tabGuideBtn").addEventListener("click", () => openTab("guide"));
     document.getElementById("tabTroubleBtn").addEventListener("click", () => openTab("troubleshooting"));
 
-    /**********************
-     * Mobile Drawer
-     **********************/
+    /* drawer */
     const drawer = document.getElementById("drawer");
     const drawerBackdrop = document.getElementById("drawerBackdrop");
     const hamburger = document.getElementById("hamburger");
@@ -872,25 +834,19 @@
     });
     drawerBackdrop.addEventListener("click", closeDrawer);
 
-    /**********************
-     * Top buttons (sidebar + drawer + mobile floating)
-     **********************/
+    /* top buttons */
     function goTop(){ window.scrollTo({ top: 0, behavior: "smooth" }); }
-
     document.getElementById("sideTopBtn").addEventListener("click", goTop);
     document.getElementById("drawerTopBtn").addEventListener("click", () => { goTop(); closeDrawer(); });
 
     const backToTopMobile = document.getElementById("backToTopMobile");
     window.addEventListener("scroll", () => {
-      // only show on mobile (sidebar hidden)
       const isMobile = window.matchMedia("(max-width: 980px)").matches;
       backToTopMobile.style.display = (isMobile && window.scrollY > 380) ? "block" : "none";
     });
     backToTopMobile.addEventListener("click", goTop);
 
-    /**********************
-     * Typewriter (slower, caret stays right after text naturally)
-     **********************/
+    /* typewriter (slower, caret follows naturally) */
     (function titleTypewriter(){
       const el = document.getElementById("typingWord");
       if (!el) return;
@@ -908,7 +864,7 @@
             deleting = true;
             return setTimeout(tick, 1600);
           }
-          return setTimeout(tick, 120); // slower typing
+          return setTimeout(tick, 120);
         } else {
           i--;
           el.textContent = word.slice(0, i);
@@ -917,210 +873,238 @@
             w = (w + 1) % words.length;
             return setTimeout(tick, 560);
           }
-          return setTimeout(tick, 85); // slower delete
+          return setTimeout(tick, 85);
         }
       }
       tick();
     })();
 
-    /**********************
-     * GUIDE CONTENT (verbatim)
-     **********************/
-    const guideMarkdown = `# Revolution Macro Guide and Fixes
+    /* GUIDE: render as HTML (no external markdown dependency) */
+    const guideHTML = `
+      <h1 id="revolution-macro-guide-and-fixes">Revolution Macro Guide and Fixes</h1>
+      <p><strong>Use this for reference!</strong></p>
+      <p><strong>Button/Feature format:</strong></p>
+      <ul>
+        <li><em>Feature/Button Name</em>: <em>What it does</em></li>
+      </ul>
 
-Use this for reference!
+      <h2 id="version-08c-pre-release-2">version 0.8c (Pre-release 2)</h2>
+      <p>Please note that the macro needs to be at least 1920x1080 - 1366x768 resolution on windows, 100% scale, no HDR and no touchscreen</p>
+      <p><strong>Default Key Binds:</strong></p>
+      <ul>
+        <li>START - F1</li>
+        <li>PAUSE - F2</li>
+        <li>STOP - F3</li>
+      </ul>
 
-**Button/Feature format:**
-- *Feature/Button Name*: *What it does*
+      <h1 id="tabs-6-in-total">Tabs - 6 in total</h1>
+      <ol>
+        <li>Gather Tab</li>
+        <li>Collect Tab</li>
+        <li>Planters Tab</li>
+        <li>Status Tab</li>
+        <li>Tools Tab</li>
+        <li>Settings Tab</li>
+      </ol>
 
-## version 0.8c (Pre-release 2)
+      <h1 id="gather-tab-1">Gather Tab (1)</h1>
+      <h2 id="fields">Fields</h2>
+      <ul>
+        <li>To edit a field, click the pen icon, to paste pre-made settings, click the 6 dots icon, and click "Paste". Find pre-made settings in the Discord server -> #patterns-configs</li>
+        <li>Editing the Field (Suggested to copy and paste pre-made settings from the Revolution Discord</li>
+        <li>Disable drift detection (uses supreme saturator to align character) -> click the pen icon -> click "align" located under max backpack -> disable</li>
+        <li>Walk or reset to hive: Skull Symbol and Person walking switch, per field setting</li>
+      </ul>
 
-Please note that the macro needs to be at least 1920x1080 - 1366x768 resolution on windows, 100% scale, no HDR and no touchscreen
-Default Key Binds:
-* START - F1
-* PAUSE - F2
-* STOP - F3
+      <h2 id="boosts">Boosts</h2>
+      <ul>
+        <li>Make sure your sprinkler is in slot 1</li>
+        <li>Configure slots 2-7 to your liking</li>
+      </ul>
 
-# Tabs - 6 in total
+      <h2 id="gather-settings">Gather settings</h2>
+      <h3>General</h3>
+      <ul>
+        <li>Set sprinkler type to your current sprinkler in Bee Swarm</li>
+        <li>If you are blue and macro in Pine tree and have good fps, enable "Use Fast Pine Return Path"</li>
+        <li>Disable Gathering: Wait for tasks and prevent the macro from farming honey</li>
+        <li>Use Dipper: Hold/Auto click your mouse</li>
+        <li>Inactive Honey Timeout: Maximum amount of seconds before the macro stop gathering if no honey is being made, default is 10 seconds</li>
+        <li>Full Bag Timeout: Maximum amount of seconds before stopping gathering if your capacity (aka. backpack) is full.</li>
+      </ul>
 
-1. Gather Tab
-2. Collect Tab
-3. Planters Tab
-4. Status Tab
-5. Tools Tab
-6. Settings Tab
+      <h3>Drift</h3>
+      <ul>
+        <li>Detect Drift: Detects when you are going away from the center</li>
+        <li>Enable Drift Compensation: Uses drift compensation if your character is drifting (also impacts camera drift)</li>
+        <li>Enable Camera Drift Compensation: Uses camera drift compensation</li>
+      </ul>
 
-# Gather Tab (1)
+      <h3>Pathing</h3>
+      <ul>
+        <li>Pattern: Picks the gathering pattern, default is cornerxsnake</li>
+        <li>Use Custom Pattern: Make your own gathering pattern</li>
+        <li>Use Natro Pattern: Uses natro's pattern</li>
+        <li>Use Pattern Annotation: Draws the pattern on your screen</li>
+        <li>Use Field Drift Compensation: Uses drift compensation relative to the field</li>
+      </ul>
 
-## Fields
+      <h1 id="collect-tab-2">Collect Tab (2)</h1>
+      <h2>General</h2>
+      <ul>
+        <li>Convert At: When to convert honey in your hive, default is 95%</li>
+        <li>Convert: Turns conversion on or off</li>
+        <li>Convert On Full: Converts when your bag is full, regardless of convert at</li>
+        <li>Convert With 0 Honey: Converts when you have 0 honey (not recommended)</li>
+        <li>Convert With 0 Honey Timeout: Maximum amount of seconds before converting with 0 honey</li>
+        <li>Reset After Convert: Resets after conversion</li>
+      </ul>
 
-- To edit a field, click the pen icon, to paste pre-made settings, click the 6 dots icon, and click "Paste". Find pre-made settings in the Discord server -> #patterns-configs
-- Editing the Field (Suggested to copy and paste pre-made settings from the Revolution Discord
-- Disable drift detection (uses supreme saturator to align character) -> click the pen icon -> click "align" located under max backpack -> disable
-- Walk or reset to hive: Skull Symbol and Person walking switch, per field setting
+      <h2>Conversion</h2>
+      <ul>
+        <li>Use Converter: Uses the converter in your hive</li>
+        <li>Use Micro Converter: Uses micro converter</li>
+        <li>Use Balloon: Uses balloon</li>
+      </ul>
 
-## Boosts
+      <h2>Snowflakes</h2>
+      <ul><li>Gather Snowflakes: Collects snowflakes</li></ul>
 
-- Make sure your sprinkler is in slot 1
-- Configure slots 2-7 to your liking
+      <h2>Puffs</h2>
+      <ul>
+        <li>Enabled: Collects puffs</li>
+        <li>Puff Planter Type: Type of planter you are using for puff</li>
+        <li>Puff Planter Field: Field where you place puff planter</li>
+        <li>Puff Planter Interval: How often to check puffs</li>
+      </ul>
 
-## Gather settings
+      <h1 id="planters-tab-3">Planters Tab (3)</h1>
+      <h2 id="auto-planters">Auto planters</h2>
+      <h3>Settings</h3>
+      <ul>
+        <li>Enabled: Turn this on for automatic planters, if not then it's manual mode</li>
+        <li>Degradation Multiplier: Default at 1.2x, ranges from 1.0 to 2.0, Encourage the algorithm to switch fields when placing the same planter</li>
+        <li>Build Nectars: The popular option is 2 Build and 1 Maintain, you can only have 3 active planters at once</li>
+        <li>Harvest Automatic: If disabled, you can choose your own min and max growth time for your planters</li>
+        <li>Harvest Fully Grown: Will only harvest when your planters is at 100%</li>
+      </ul>
 
-### General
-- Set sprinkler type to your current sprinkler in Bee Swarm
-- If you are blue and macro in Pine tree and have good fps, enable "Use Fast Pine Return Path"
-- Disable Gathering: Wait for tasks and prevent the macro from farming honey
-- Use Dipper: Hold/Auto click your mouse
-- Inactive Honey Timeout: Maximum amount of seconds before the macro stop gathering if no honey is being made, default is 10 seconds
-- Full Bag Timeout: Maximum amount of seconds before stopping gathering if your capacity (aka. backpack) is full.
+      <h3>Nectar Goals</h3>
+      <ul>
+        <li>There are five types of Nectar: Invigorating, Satisfying, Motivating, Comforting and Refreshing</li>
+        <li>You can set your own target percentage for each nectars</li>
+        <li>You can drag them up or down to swap/change priority level</li>
+      </ul>
 
-### Drift
-- Detect Drift: Detects when you are going away from the center
-- Enable Drift Compensation: Uses drift compensation if your character is drifting (also impacts camera drift)
-- Enable Camera Drift Compensation: Uses camera drift compensation
+      <h3>Fields</h3>
+      <ul><li>You can select each fields to enable/disable planting in that field</li></ul>
 
-### Pathing
-- Pattern: Picks the gathering pattern, default is cornerxsnake
-- Use Custom Pattern: Make your own gathering pattern
-- Use Natro Pattern: Uses natro's pattern
-- Use Pattern Annotation: Draws the pattern on your screen
-- Use Field Drift Compensation: Uses drift compensation relative to the field
+      <h1 id="status-tab-4">Status Tab (4)</h1>
+      <h2>General</h2>
+      <ul><li>Shows your current status, what the macro is doing</li></ul>
+      <h2>Stats</h2>
+      <ul><li>Displays macro statistics, honey per hour, average honey per hour, etc</li></ul>
+      <h2>Discord</h2>
+      <ul><li>Discord Rich Presence: Shows your status on discord</li></ul>
 
-# Collect Tab (2)
+      <h1 id="tools-tab-5">Tools Tab (5)</h1>
+      <h2>General</h2>
+      <ul>
+        <li>Rejoin: Rejoins the server</li>
+        <li>Respawn: Respawns your character</li>
+        <li>Leave: Leaves the server</li>
+      </ul>
 
-## General
-- Convert At: When to convert honey in your hive, default is 95%
-- Convert: Turns conversion on or off
-- Convert On Full: Converts when your bag is full, regardless of convert at
-- Convert With 0 Honey: Converts when you have 0 honey (not recommended)
-- Convert With 0 Honey Timeout: Maximum amount of seconds before converting with 0 honey
-- Reset After Convert: Resets after conversion
+      <h2>Packs</h2>
+      <ul>
+        <li>Enabled: Collects packs</li>
+        <li>Use Natro Pack List: Uses natro's pack list</li>
+      </ul>
 
-## Conversion
-- Use Converter: Uses the converter in your hive
-- Use Micro Converter: Uses micro converter
-- Use Balloon: Uses balloon
+      <h2>Quests</h2>
+      <ul>
+        <li>Enabled: Completes quests</li>
+        <li>Use Quest Menu: Uses the quest menu</li>
+      </ul>
 
-## Snowflakes
-- Gather Snowflakes: Collects snowflakes
+      <h2>Mobs</h2>
+      <ul>
+        <li>Enabled: Kills mobs</li>
+        <li>Use Mondo Hop: Hops mondo chick</li>
+        <li>Use Vicious Bee Hop: Hops vicious bee</li>
+      </ul>
 
-## Puffs
-- Enabled: Collects puffs
-- Puff Planter Type: Type of planter you are using for puff
-- Puff Planter Field: Field where you place puff planter
-- Puff Planter Interval: How often to check puffs
+      <h1 id="settings-tab-6">Settings Tab (6)</h1>
+      <h2>Macro</h2>
+      <h3>Appearance</h3>
+      <ul>
+        <li>Theme: dark mode ofc</li>
+        <li>Always On Top: Only enable this if you need to always see the macro app window</li>
+      </ul>
 
-# Planters Tab (3)
+      <h3>Hotkeys</h3>
+      <ul><li>Set your Start, Pause, Stop hotkeys here</li></ul>
 
-## Auto planters
+      <h3>Capture</h3>
+      <ul>
+        <li>Fallback Capture Mode: Available options are Window, GPU, Legacy</li>
+        <li>Detection Frame Rate: Lower = Less CPU usage, but less accurate buff detection and movement correction</li>
+      </ul>
 
-### Settings
-- Enabled: Turn this on for automatic planters, if not then it's manual mode
-- Degradation Multiplier: Default at 1.2x, ranges from 1.0 to 2.0, Encourage the algorithm to switch fields when placing the same planter
-- Build Nectars: The popular option is 2 Build and 1 Maintain, you can only have 3 active planters at once
-- Harvest Automatic: If disabled, you can choose your own min and max growth time for your planters
-- Harvest Fully Grown: Will only harvest when your planters is at 100%
+      <h3>Misc</h3>
+      <ul>
+        <li>Log Level: Set to 4 for maximum verbose logging (only for debugging), else keep at 0</li>
+        <li>Load Timeout: Maximum seconds before aborting loading AI models (default is 30), set this to something high like 60 if your AI models aren't loading</li>
+      </ul>
 
-### Nectar Goals
-- There are five types of Nectar: Invigorating, Satisfying, Motivating, Comforting and Refreshing
-- You can set your own target percentage for each nectars
-- You can drag them up or down to swap/change priority level
+      <h2>Game</h2>
+      <h3>Movement</h3>
+      <ul>
+        <li>Player Movespeed: Your BSS movespeed (ingame) WITHOUT any speed buffs</li>
+        <li>Camera Sensitivity: Set to your current in-game settings, or press the eye icon for auto detect</li>
+        <li>Key Delay: Default at 20ms, Set this higher to 30-50 if you have low FPS</li>
+        <li>Pattern Retry Count: How many times should the macro attempt to do navigations before giving up on the task</li>
+      </ul>
 
-### Fields
-- You can select each fields to enable/disable planting in that field
+      <h3>Routing</h3>
+      <ul>
+        <li>Use High Alignment: Turn this on if you have low FPS or pathing issues</li>
+        <li>Disable Red Cannon: Only turn this on if you can't use the red cannon</li>
+      </ul>
 
-# Status Tab (4)
+      <h3>Join</h3>
+      <ul>
+        <li>Preferred Hive Slot: Slot 6 to 1, 6 being closest to noob shop and 1 closest to red cannon</li>
+        <li>Hive Claim Method: Default is Detect, set it to Check if it's not working</li>
+        <li>Private Server Link: Paste your private server link in here</li>
+        <li>Fallback the Public Server: Join public servers if the macro is having trouble joining the private server</li>
+      </ul>
 
-## General
-- Shows your current status, what the macro is doing
+      <h2>Networking</h2>
+      <ul>
+        <li>Identity: Your current network identity (differs in RDPs)</li>
+        <li>Relay: Click start</li>
+        <li>Auto-Start: Turn this on if you're constantly using alts</li>
+        <li>Auto-Connect: Connect to the relay on start</li>
+        <li>Available Relays: Click the plus icon to add a relay, Click the entry icon on your added relay to join it, Click the star icon to your added relay to remove it</li>
+      </ul>
 
-## Stats
-- Displays macro statistics, honey per hour, average honey per hour, etc
+      <h2>Presets</h2>
+      <ul><li>WIP.</li></ul>
 
-## Discord
-- Discord Rich Presence: Shows your status on discord
+      <h2>Accounts</h2>
+      <ul><li>WIP.</li></ul>
 
-# Tools Tab (5)
+      <h2>Credits</h2>
+      <ul><li>List of people who helped developed the macro and donators</li></ul>
 
-## General
-- Rejoin: Rejoins the server
-- Respawn: Respawns your character
-- Leave: Leaves the server
+      <hr />
+      <p>made by draco/imes ^^</p>
+    `;
 
-## Packs
-- Enabled: Collects packs
-- Use Natro Pack List: Uses natro's pack list
+    document.getElementById("guideContent").innerHTML = guideHTML;
 
-## Quests
-- Enabled: Completes quests
-- Use Quest Menu: Uses the quest menu
-
-## Mobs
-- Enabled: Kills mobs
-- Use Mondo Hop: Hops mondo chick
-- Use Vicious Bee Hop: Hops vicious bee
-
-# Settings Tab (6)
-
-## Macro
-
-### Appearance
-- Theme: dark mode ofc
-- Always On Top: Only enable this if you need to always see the macro app window
-
-### Hotkeys
-- Set your Start, Pause, Stop hotkeys here
-
-### Capture
-- Fallback Capture Mode: Available options are Window, GPU, Legacy
-- Detection Frame Rate: Lower = Less CPU usage, but less accurate buff detection and movement correction
-
-### Misc
-- Log Level: Set to 4 for maximum verbose logging (only for debugging), else keep at 0
-- Load Timeout: Maximum seconds before aborting loading AI models (default is 30), set this to something high like 60 if your AI models aren't loading
-
-## Game
-
-### Movement
-- Player Movespeed: Your BSS movespeed (ingame) WITHOUT any speed buffs
-- Camera Sensitivity: Set to your current in-game settings, or press the eye icon for auto detect
-- Key Delay: Default at 20ms, Set this higher to 30-50 if you have low FPS
-- Pattern Retry Count: How many times should the macro attempt to do navigations before giving up on the task
-
-### Routing
-- Use High Alignment: Turn this on if you have low FPS or pathing issues
-- Disable Red Cannon: Only turn this on if you can't use the red cannon
-
-### Join
-- Preferred Hive Slot: Slot 6 to 1, 6 being closest to noob shop and 1 closest to red cannon
-- Hive Claim Method: Default is Detect, set it to Check if it's not working
-- Private Server Link: Paste your private server link in here
-- Fallback the Public Server: Join public servers if the macro is having trouble joining the private server
-
-## Networking
-- Identity: Your current network identity (differs in RDPs)
-- Relay: Click start
-- Auto-Start: Turn this on if you're constantly using alts
-- Auto-Connect: Connect to the relay on start
-- Available Relays: Click the plus icon to add a relay, Click the entry icon on your added relay to join it, Click the star icon to your added relay to remove it
-
-## Presets
-- WIP.
-
-## Accounts
-- WIP.
-
-## Credits
-- List of people who helped developed the macro and donators
-
-----
-made by draco/imes ^^`;
-
-    document.getElementById("guideContent").innerHTML = marked.parse(guideMarkdown);
-
-    /**********************
-     * Copy buttons on code blocks
-     **********************/
+    /* copy buttons on code blocks */
     function addCopyButtons(root){
       const blocks = (root || document).querySelectorAll("pre");
       blocks.forEach(pre => {
@@ -1154,39 +1138,19 @@ made by draco/imes ^^`;
     }
     addCopyButtons(document.getElementById("guideContent"));
 
-    /**********************
-     * Sidebar: EXACTLY 6 links (the tabs)
-     **********************/
-    function slugify(text){
-      return (text || "")
-        .toLowerCase()
-        .replace(/[^a-z0-9\s-]/g, "")
-        .trim()
-        .replace(/\s+/g, "-");
-    }
-
+    /* build EXACTLY 6 sidebar links */
     function buildSixItemNav(){
-      const guideRoot = document.getElementById("guideContent");
       const nav = document.getElementById("guideNav");
       const drawerLinks = document.getElementById("drawerLinks");
-
-      if (!guideRoot || !nav || !drawerLinks) return;
-
-      // Find headings and assign IDs
-      const headings = guideRoot.querySelectorAll("h1, h2");
-      headings.forEach(h => {
-        const txt = (h.textContent || "").trim();
-        if (!txt) return;
-        h.id = slugify(txt);
-      });
+      if (!nav || !drawerLinks) return;
 
       const wanted = [
-        { label: "Gather Tab (1)", id: slugify("Gather Tab (1)") },
-        { label: "Collect Tab (2)", id: slugify("Collect Tab (2)") },
-        { label: "Planters Tab (3)", id: slugify("Planters Tab (3)") },
-        { label: "Status Tab (4)", id: slugify("Status Tab (4)") },
-        { label: "Tools Tab (5)", id: slugify("Tools Tab (5)") },
-        { label: "Settings Tab (6)", id: slugify("Settings Tab (6)") },
+        { label: "Gather Tab (1)", id: "gather-tab-1" },
+        { label: "Collect Tab (2)", id: "collect-tab-2" },
+        { label: "Planters Tab (3)", id: "planters-tab-3" },
+        { label: "Status Tab (4)", id: "status-tab-4" },
+        { label: "Tools Tab (5)", id: "tools-tab-5" },
+        { label: "Settings Tab (6)", id: "settings-tab-6" },
       ];
 
       nav.innerHTML = "";
@@ -1249,18 +1213,15 @@ made by draco/imes ^^`;
       });
     }
 
-    /**********************
-     * Troubleshooting: load + render
-     **********************/
+    /* Troubleshooting: load + render */
     let TROUBLE_CACHE = null;
     let TROUBLE_LOADED = false;
 
-    // Strip emoji shortcodes and obvious emoji characters from titles (you asked: no emojis)
     function stripEmoji(text){
       if (!text) return "";
       return text
-        .replace(/:[a-zA-Z0-9_+-]+:/g, "")      // :computer: etc
-        .replace(/[\u{1F300}-\u{1FAFF}]/gu, "") // emoji ranges
+        .replace(/:[a-zA-Z0-9_+-]+:/g, "")
+        .replace(/[\u{1F300}-\u{1FAFF}]/gu, "")
         .replace(/\s{2,}/g, " ")
         .trim();
     }
@@ -1272,8 +1233,6 @@ made by draco/imes ^^`;
     async function fetchTroubleJson(){
       const { owner, repo, branch } = getRepoContext();
       const cacheBust = Date.now();
-
-      // Pages sometimes won’t serve .github reliably; raw GitHub is safest.
       const tries = [
         `troubleshooting.json?v=${cacheBust}`,
         `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/.github/troubleshooting.json?v=${cacheBust}`,
@@ -1347,13 +1306,13 @@ made by draco/imes ^^`;
       document.querySelectorAll(".ts-filter-pill").forEach(p => p.classList.remove("active"));
       if (activeCat === "all") allCatsBtn.classList.add("active");
       else {
-        const pill = document.querySelector(\`.ts-filter-pill[data-filter="\${activeCat}"]\`);
+        const pill = document.querySelector(`.ts-filter-pill[data-filter="${activeCat}"]`);
         if (pill) pill.classList.add("active");
       }
 
       document.querySelectorAll(".cat-card").forEach(c => c.classList.remove("active"));
       if (activeCat !== "all"){
-        const card = document.querySelector(\`.cat-card[data-cat="\${activeCat}"]\`);
+        const card = document.querySelector(`.cat-card[data-cat="${activeCat}"]`);
         if (card) card.classList.add("active");
       }
 
@@ -1415,13 +1374,11 @@ made by draco/imes ^^`;
       });
     }
 
-    /**********************
-     * Init
-     **********************/
+    /* init */
     syncHeaderHeight();
     buildSixItemNav();
     openTab("guide");
-    // If user loads with hash, keep it smooth + correct offset
+
     window.addEventListener("load", () => {
       syncHeaderHeight();
       const id = (location.hash || "").replace("#", "");
@@ -1435,3 +1392,4 @@ made by draco/imes ^^`;
   </script>
 </body>
 </html>
+
