@@ -105,8 +105,15 @@
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(4px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(4px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     /* ===== Panels ===== */
@@ -185,6 +192,16 @@
     #backToTop:hover {
       background: rgba(20, 24, 33, 0.98);
     }
+
+    .section-title {
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+
+    .section-empty {
+      opacity: 0.7;
+      margin-bottom: 10px;
+    }
   </style>
 </head>
 
@@ -197,8 +214,11 @@
       <span class="badge-verified">Verified</span>
     </div>
     <div class="topbar-right">
-      <a class="topbar-link" href="https://github.com/RevolutionGuides/revolutionmacroguide/issues" target="_blank" rel="noopener noreferrer">Open Issues</a>
-      <a class="topbar-link" href="https://github.com/RevolutionGuides/revolutionmacroguide/issues/new?template=troubleshooting.yml" target="_blank" rel="noopener noreferrer">Submit Fix</a>
+      <a class="topbar-link" href="https://github.com/RevolutionGuides/revolutionmacroguide/issues" target="_blank"
+        rel="noopener noreferrer">Open Issues</a>
+      <a class="topbar-link"
+        href="https://github.com/RevolutionGuides/revolutionmacroguide/issues/new?template=troubleshooting.yml"
+        target="_blank" rel="noopener noreferrer">Submit Fix</a>
     </div>
   </div>
 
@@ -219,7 +239,7 @@
 
     <p>
       <a href="https://github.com/RevolutionGuides/revolutionmacroguide/issues/new?template=troubleshooting.yml"
-         target="_blank" rel="noopener noreferrer">
+        target="_blank" rel="noopener noreferrer">
         Submit a new problem + fix
       </a>
     </p>
@@ -258,25 +278,55 @@
       const container = document.getElementById('issues');
       container.innerHTML = "";
 
-      issues.forEach(issue => {
-        const block = document.createElement('div');
-        block.className = "issue-block";
+      const sections = [
+        { key: "mac", title: "Mac Issues" },
+        { key: "windows", title: "Windows Issues" },
+        { key: "macro", title: "Macro Issues" },
+        { key: "pro", title: "Pro Issues" }
+      ];
 
-        const title = document.createElement('div');
-        title.className = "issue-title";
-        title.textContent = issue.title;
+      const normalized = (issues || []).map(i => ({
+        title: i.title || "",
+        solution: i.solution || "",
+        category: (i.category || "").toLowerCase().trim()
+      }));
 
-        const body = document.createElement('div');
-        body.className = "issue-body";
-        body.textContent = issue.solution;
+      sections.forEach(section => {
+        const header = document.createElement("h3");
+        header.className = "section-title";
+        header.textContent = section.title;
+        container.appendChild(header);
 
-        title.onclick = () => {
-          body.style.display = body.style.display === "none" ? "block" : "none";
-        };
+        const items = normalized.filter(i => i.category === section.key);
 
-        block.appendChild(title);
-        block.appendChild(body);
-        container.appendChild(block);
+        if (items.length === 0) {
+          const empty = document.createElement("div");
+          empty.className = "section-empty";
+          empty.textContent = "No entries yet.";
+          container.appendChild(empty);
+          return;
+        }
+
+        items.forEach(issue => {
+          const block = document.createElement('div');
+          block.className = "issue-block";
+
+          const title = document.createElement('div');
+          title.className = "issue-title";
+          title.textContent = issue.title;
+
+          const body = document.createElement('div');
+          body.className = "issue-body";
+          body.innerHTML = issue.solution;
+
+          title.onclick = () => {
+            body.style.display = body.style.display === "none" ? "block" : "none";
+          };
+
+          block.appendChild(title);
+          block.appendChild(body);
+          container.appendChild(block);
+        });
       });
     }
 
@@ -299,9 +349,17 @@
     });
 
     // FULL GUIDE (verbatim). Do not edit anything inside this string.
-    const guideMarkdown = `# Revolution Macro Guide and Fixes
+    const guideMarkdown = `# Revolution Macro and basic menu navigation guide
 
 Use this for reference!
+
+**Tabs and sub menu formats:**
+- "#" means it's a top navigation bar's tab
+- "##" means it's a menu you can go in to
+- "###" means it's a sub menu
+- "####" means it's a deeper sub menu
+
+Do not include the hashtags in your responses, format them instead!
 
 **Button/Feature format:**
 - *Feature/Button Name*: *What it does*
@@ -599,7 +657,21 @@ Run /report for an instant hourly graph report. Hourly graphs are sent automatic
 - List of people who helped developed the macro and donators
 
 ----
-made by draco/imes ^^`;
+made by draco/imes ^^
+
+Skillet Pine Tree - Diamond/Gold/Silver Sprinklers
+{"name":"Skillet Pine Tree - Diamond/Gold/Silver Sprinklers","position":"bottom-right","length":4,"width":0,"distance":6,"yaw":4,"backpackPercent":95,"seconds":900,"gatherPattern":"Skillet","field":"pinetree"}
+
+
+
+
+Skillet Pine Tree - Supreme Saturator
+{"name":"Skillet Pine Tree - Supreme Saturator","position":"bottom-right","length":4,"width":0,"distance":3,"yaw":4,"backpackPercent":95,"seconds":900,"gatherPattern":"Skillet","field":"pinetree"}
+
+
+
+AI Gather Pine Tree - Supreme Saturator
+{"name":"AI Gather Pine Tree - Supreme Saturator","position":"center","length":4,"width":0,"distance":3,"yaw":2,"backpackPercent":95,"seconds":900,"driftComp":true,"gatherPattern":"AI Gather","field":"pinetree"}`;
 
     document.getElementById("guideContent").innerHTML = marked.parse(guideMarkdown);
 
@@ -607,5 +679,5 @@ made by draco/imes ^^`;
   </script>
 
 </body>
-</html>
 
+</html>
